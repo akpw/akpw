@@ -33,7 +33,7 @@ $ tagger -f '08 Queen Alice.mp3'
       Track: 8
 ````
 (The media files above are random samples from [FreePD.com](http://freepd.com))
-With a bit more options, the tools can go way further to e.g. dispaly information about sound volume levels or intervals of silence:
+With a bit more options, the tools can go way further to e.g. display information about sound volume levels or intervals of silence:
 
 ````
 $ bmfp -f '08 Queen Alice.mp3'  print --show-volume

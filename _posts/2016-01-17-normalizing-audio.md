@@ -28,4 +28,4 @@ Finished running 3 tasks (Succeeded: 3, Failed: 0)
 Total running time: 0:00:11.33
 ````
 
-The ```bmfp normalize```` command in its simplest form runs over all media files in a given directory, processing all media files that are not yet normalized.
+The ```bmfp normalize``` command in its simplest form runs over all media files in a given directory, processing all media files that are not yet normalized.

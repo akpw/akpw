@@ -10,6 +10,12 @@ layout: default
       {% unless forloop.last %} &bull; {% endunless %}{% endfor %}
     </p>
     <p class="post-date" itemprop="datePublished" content="{{ page.date | date: "%Y-%m-%d" }}">{{ page.date | date_to_string }}</p>
+
+    {% if page.image %}
+    <img class="feat-img is-hidden-mobile"
+        src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/{{ page.image }}">
+    {% endif %}
+
     {{ content }}
 
     {% if page.comments %}

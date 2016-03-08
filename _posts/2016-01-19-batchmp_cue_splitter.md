@@ -7,7 +7,7 @@ tags: [batch-mp-tools, python, batch multimedia processing]
 comments: true
 ---
 
-A cue sheet is a metadata file that can describe layout of audio and data CDs. Cue sheets are stored as plain text files and commonly have a ".cue" filename extension. For example, a multi-track audio CD can be ripped to a single audio file with a cue sheet describing individual tracks position, length, as welll as general information such as track titles, performer, etc.
+A cue sheet is a metadata file that can describe layout of audio and data CDs. Cue sheets are stored as plain text files and commonly have a ".cue" filename extension. For example, a multi-track audio CD can be ripped to a single audio file with a cue sheet describing individual tracks position, length, as well as general information such as track titles, performer, etc.
 An example of such cue file would look something like:
 
 ````
