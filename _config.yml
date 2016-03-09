@@ -1,8 +1,8 @@
 name: Development Blog
-#url: 'http://akpdev.com'
+url: 'http://akpdev.com'
 description: ' on software and related things'
 
-exclude: [Gemfile, Gemfile.lock, README.md]
+#exclude: [Gemfile, Gemfile.lock, README.md]
 markdown: kramdown
 
 author: 'Arseniy Kuznetsov'
