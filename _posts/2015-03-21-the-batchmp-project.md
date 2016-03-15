@@ -3,7 +3,7 @@ layout: post
 title: "The BatchMP Tools Project"
 description: "The BatchMP Tools Project"
 category: articles
-tags: [batch-mp-tools, python, batch multimedia processing]
+tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 comments: true
 ---
 

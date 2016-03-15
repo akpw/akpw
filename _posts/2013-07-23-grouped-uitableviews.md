@@ -3,7 +3,7 @@ layout: post
 title: "Grouped UITableViews with no impact on your sanity"
 description: "Grouped UITableViews in code"
 category: articles
-tags: [iOS, Objective-C, MobileDevelopment]
+tags: [iOS, Objective-C, Mobile Development]
 comments: true
 ---
 

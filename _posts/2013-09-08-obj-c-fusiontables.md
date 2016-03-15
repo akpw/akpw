@@ -3,7 +3,7 @@ layout: post
 title: "Obj-C-FusionTables Project"
 description: "Obj-C-FusionTables Project"
 category: articles
-tags: [iOS, Objective-C, Obj-C-FusionTables, MobileDevelopment, Google Fusion Tables]
+tags: [iOS, Objective-C, Obj-C-FusionTables, Mobile Development, Google Fusion Tables]
 comments: true
 image: obj-ft-v1.0.png
 ---

@@ -3,7 +3,7 @@ layout: post
 title: "BatchMP Cue Splitter"
 description: "How to split audio into multiple tracks using Cue sheets"
 category: articles
-tags: [batch-mp-tools, python, batch multimedia processing]
+tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 comments: true
 ---
 

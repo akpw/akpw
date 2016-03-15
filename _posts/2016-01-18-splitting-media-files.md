@@ -3,7 +3,7 @@ layout: post
 title: "Splitting media files"
 description: "How to split audio by silence"
 category: articles
-tags: [batch-mp-tools, python, batch multimedia processing]
+tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 comments: true
 ---
 

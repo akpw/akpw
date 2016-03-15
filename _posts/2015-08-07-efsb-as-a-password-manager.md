@@ -3,7 +3,7 @@ layout: post
 title: "EFSB: who needs password managers?"
 description: "using EFSB as a password managers"
 category: articles
-tags: [efst, cryptography, python]
+tags: [EFST, Cryptography, Python]
 comments: true
 ---
 

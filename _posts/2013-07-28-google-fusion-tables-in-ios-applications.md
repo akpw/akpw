@@ -3,7 +3,7 @@ layout: post
 title: "Google Fusion Tables in iOS Applications"
 description: "Google Fusion Tables in iOS Applications"
 category: articles
-tags: [iOS, Objective-C, Obj-C-FusionTables, MobileDevelopment, Google Fusion Tables]
+tags: [iOS, Objective-C, Obj-C-FusionTables, Mobile Development, Google Fusion Tables]
 comments: true
 ---
 

@@ -3,7 +3,7 @@ layout: post
 title: "BatchMP Tools Tutorial, Part I"
 description: "BatchMP Tools Tutorial, Part I"
 category: articles
-tags: [batch-mp-tools, python, batch multimedia processing]
+tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 comments: true
 ---
 

@@ -3,7 +3,7 @@ layout: post
 title: "Obj-C-FusionTables v2.0"
 description: "Google Fusion Tables in iOS Applications"
 category: articles
-tags: [iOS, Objective-C, Obj-C-FusionTables, MobileDevelopment, Google Fusion Tables]
+tags: [iOS, Objective-C, Obj-C-FusionTables, Mobile Development, Google Fusion Tables]
 comments: true
 image: objc-ft-v2.png
 ---

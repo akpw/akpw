@@ -3,7 +3,7 @@ layout: post
 title: "Obj-C-FusionTables recognised by Google"
 description: "Obj-C-FusionTables recognised by the Google dev team"
 category: articles
-tags: [iOS, Objective-C, Obj-C-FusionTables, MobileDevelopment, Google Fusion Tables]
+tags: [iOS, Objective-C, Obj-C-FusionTables, Mobile Development, Google Fusion Tables]
 comments: true
 ---
 

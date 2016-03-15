@@ -3,7 +3,7 @@ layout: post
 title: "EFST tips & tricks: Batch mounting"
 description: "Batch mounting with EFST"
 category: articles
-tags: [efst, cryptography, python]
+tags: [EFST, Cryptography, Python]
 comments: true
 ---
 

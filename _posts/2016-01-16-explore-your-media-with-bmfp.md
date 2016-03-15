@@ -3,7 +3,7 @@ layout: post
 title: "Explore your media with BMFP"
 description: "Exploring your media with BMFP"
 category: articles
-tags: [batch-mp-tools, python, batch multimedia processing]
+tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 comments: true
 ---
 
