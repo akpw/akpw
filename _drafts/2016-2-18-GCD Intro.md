@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Introduction to Grand Central Dispatch"
+title: "Swift concurrency: Practical GCD, Part I"
 description: "Swift concurrency series"
 category: articles
-tags: [iOS, OSX, Apple Swift, GCD, Concurrency, MobileDevelopment]
+tags: [iOS, OSX, Apple Swift, Grand Central Dispatch, Concurrency, Mobile Development]
 comments: true
 ---
 
