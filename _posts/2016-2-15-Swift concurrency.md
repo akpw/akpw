@@ -36,7 +36,7 @@ GCD abstracts thread creation, moving it down to the system level and handling a
 
 On all Darwin platforms, Grand Central Dispatch is tightly integrated with the operating system kernel and is highly optimized for effective resource management and scheduling.
 
-In addition to the GCD functionality, the libdispatch library is also behind yet another, higher-level abstraction.   [NSOperation](https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSOperation_class/index.html) represents an abstract unit of parallelizable work, while the associated [NSOperationQueue](https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/NSOperationQueue_class/)[^1] accepts and runs specific instances of NSOperations. This model supports many advanced features such as e.g. operation dependencies across multiple queues or number of concurrent operations per a given queue.
+In addition to the GCD functionality, the libdispatch library is also behind yet another, higher-level abstraction[^1].   [NSOperation](https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSOperation_class/index.html) represents an abstract unit of parallelizable work, while the associated [NSOperationQueue](https://developer.apple.com/library/prerelease/ios/documentation/Cocoa/Reference/NSOperationQueue_class/) accepts and runs specific instances of NSOperations. This model supports many advanced features such as e.g. operation dependencies across multiple queues or number of concurrent operations per a given queue.
 
 While GCD and NSOperations are by far the most common way to deal with concurrency in iOS and OSX, Apple still recognizes explicit creation and management of threads.
 
