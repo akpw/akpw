@@ -56,19 +56,19 @@ That alone might be enough to start playing with Swift, though dealing with thre
 
 While this concern is not unreasonable at that moment, the good news is that the [port of Grand Central Dispatch](https://github.com/apple/swift-corelibs-libdispatch) to Linux seems to be a high priority project for multiple industry players, most noticeably Apple and IBM (the latter currently accounting for close to 50% of the commits).
 
-Recently released [IBM's Kitura](https://github.com/IBM-Swift/Kitura?cm_mc_uid=10741446831914349027875&cm_mc_sid_50200000=1458025338) is a multi-platform Web Framework that already uses Grand Central Dispatch to handle concurrency. That is a promising good news for future Swift on Linux.
+Recently released [IBM's Kitura](https://github.com/IBM-Swift/Kitura?cm_mc_uid=10741446831914349027875&cm_mc_sid_50200000=1458025338) is a multi-platform Web Framework that already uses Grand Central Dispatch to handle concurrency. That is a promising good news for the future of Swift on Linux.
 
 ***Conclusion***
 
 If you develop for iOS or OSX, adopting Swing is not really an _if_ question and speaking of the good time to switch Swift 2.0 provides a reasonable level of stability for production time. Specifically for concurrency, Swift does not add much to the previous Objective-C approach though it does give you a nicer syntax and more elegant ways to solve some of the challenges. More on that in later parts, where the focus will be on practical solutions to common concurrency problems.
 
-For Linux and the server-side, it's a good time to start experimenting and follow what people do with Swift there. Not really production-time yet IMO but things do look promising and IBM's involvement definitely helps keep it on the bright side.
+For Linux and the server-side, it's probably a good time to start experimenting and follow what people do with Swift there. Not really production-time yet IMO but things do look promising and IBM's involvement definitely helps keep it on the bright side.
 
 
 
 ***Notes and References***
 
-[^1]: NSOperation and NSOperationQueue both precede Grand Central Dispatch technology, though as of OSX 10.6 and iOS 4 they were re-implemented using GCD.
+[^1]: NSOperations precede Grand Central Dispatch technology, though as of OSX 10.6 and iOS 4 they were re-implemented using GCD.
 
 [^2]: [Concurrency programming guide](https://developer.apple.com/library/ios/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html)
 
