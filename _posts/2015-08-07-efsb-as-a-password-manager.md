@@ -4,7 +4,7 @@ title: "EFSB: who needs password managers?"
 description: "using EFSB as a password managers"
 category: articles
 tags: [EFST, Cryptography, Python]
-comments: true
+comments: false
 ---
 
 [EFSB](https://github.com/akpw/efst#efsb) is an [EFST](https://github.com/akpw/efst) configuration tool for managing EncFS backend stores folders. It can show registered EncFS File Systems info, retrieve plaintext EncFS key values, encode / decode file names, list EncFS un-decodable files, etc.

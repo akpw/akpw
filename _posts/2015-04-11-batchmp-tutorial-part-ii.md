@@ -4,7 +4,7 @@ title: "BatchMP Tools Tutorial, Part II"
 description: "BatchMP Tools Tutorial, Part II"
 category: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
-comments: true
+comments: false
 ---
 
 Content:

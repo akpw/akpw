@@ -4,7 +4,7 @@ title: "BatchMP Cue Splitter"
 description: "How to split audio into multiple tracks using Cue sheets"
 category: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
-comments: true
+comments: false
 ---
 
 A cue sheet is a metadata file that can describe layout of audio and data CDs. Cue sheets are stored as plain text files and commonly have a ".cue" filename extension. For example, a multi-track audio CD can be ripped to a single audio file with a cue sheet describing individual tracks position, length, as well as general information such as track titles, performer, etc.

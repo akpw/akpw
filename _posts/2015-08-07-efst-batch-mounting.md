@@ -4,7 +4,7 @@ title: "EFST tips & tricks: Batch mounting"
 description: "Batch mounting with EFST"
 category: articles
 tags: [EFST, Cryptography, Python]
-comments: true
+comments: false
 ---
 
 A commond question about [EFST](https://github.com/akpw/efst) is how to configure automount at login. While easy enough to do via a custom startup script, for the time being this functionality it's not available out-of-the-box.

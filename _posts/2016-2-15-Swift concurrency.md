@@ -48,7 +48,7 @@ Later parts of this series will cover iOS / OSX concurrency in depth, going over
 
 Following Apple's recommendation, the focus primarily will be on NSOperaion and Grand Central Dispatch, including when it's appropriate to use one over another.
 
-***Swift Concurrency on Linux platforms***
+***Swift Concurrency on Linux***
 
 As a part of the [Foundation Project](https://github.com/apple/swift-corelibs-foundation), Swift supports using [NSThread](https://developer.apple.com/library/ios/documentation/Cocoa/Reference/Foundation/Classes/NSThread_Class/) and [NSTask](https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSTask_Class/index.html#//apple_ref/occ/cl/NSTask) as well as native POSIX threads.
 
@@ -66,7 +66,7 @@ For Linux and the server-side, it's probably a good time to start experimenting 
 
 
 
-***Notes and References***
+* * *
 
 [^1]: NSOperations precede Grand Central Dispatch technology, though as of OSX 10.6 and iOS 4 they were re-implemented using GCD.
 

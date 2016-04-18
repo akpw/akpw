@@ -4,7 +4,7 @@ title: "Google Fusion Tables in iOS Applications"
 description: "Google Fusion Tables in iOS Applications"
 category: articles
 tags: [iOS, Objective-C, Obj-C-FusionTables, Mobile Development, Google Fusion Tables]
-comments: true
+comments: false
 ---
 
 Based on [recent questions](http://stackoverflow.com/questions/17896012/creating-fusion-table-from-ios/17896079#17896079) of stackoverflow, looks like iOS developers are starting to look at using [Google Fusion Tables](http://www.google.com/drive/apps.html#fusiontables) in their apps. Not a surprise,  as Fusion Tables looks like a promising technology that has reached maturity with the [Fusion Tables API v1.0](https://developers.google.com/fusiontables/).

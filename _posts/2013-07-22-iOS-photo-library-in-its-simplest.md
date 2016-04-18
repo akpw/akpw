@@ -4,7 +4,7 @@ title: "iOS Photo Library in its simplest"
 description: "iOS Photo Library in its simplest"
 category: articles
 tags: [iOS, Objective-C, iOS ALAssetsLibrary, Mobile Development]
-comments: true
+comments: false
 ---
 
 

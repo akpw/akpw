@@ -4,7 +4,7 @@ title: "Normalizing audio"
 description: "How to normalize audio"
 category: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
-comments: true
+comments: false
 ---
 
 In general, audio normalization is the process of adding constant amount of gain to bring the average or peak amplitude to a target level.

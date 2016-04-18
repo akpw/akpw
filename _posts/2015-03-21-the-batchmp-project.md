@@ -4,7 +4,7 @@ title: "The BatchMP Tools Project"
 description: "The BatchMP Tools Project"
 category: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
-comments: true
+comments: false
 ---
 
 

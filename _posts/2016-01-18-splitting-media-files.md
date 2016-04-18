@@ -4,7 +4,7 @@ title: "Splitting media files"
 description: "How to split audio by silence"
 category: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
-comments: true
+comments: false
 ---
 
 The Part I of [BatchMP Tools](https://github.com/akpw/batch-mp-tools) tutorial went into some details of how to automatically break audio / video into multiple pieces based on silence. The ```bmfp silencesplit``` command analyzes content of media files and then splits them into segments via detecting specified level of silence.

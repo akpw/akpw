@@ -4,7 +4,7 @@ title: "Grouped UITableViews with no impact on your sanity"
 description: "Grouped UITableViews in code"
 category: articles
 tags: [iOS, Objective-C, Mobile Development]
-comments: true
+comments: false
 ---
 
 UITableViews are ubiquitous  in almost any iOS app. Grouped table views show information in distinct sections, making it a clean visual interface for many different cases.

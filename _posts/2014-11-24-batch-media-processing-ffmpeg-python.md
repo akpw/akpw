@@ -4,7 +4,7 @@ title: "Parallel batch media processing with FFmpeg and Python"
 description: "Parallel batch media processing with FFmpeg and Python"
 category: articles
 tags: [Python, Multiprocessing, Concurrency, FFmpeg, Noise Reduction, Batch Multimedia Processing]
-comments: true
+comments: false
 ---
 
 A short summary:

@@ -4,7 +4,7 @@ title: "Explore your media with BMFP"
 description: "Exploring your media with BMFP"
 category: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
-comments: true
+comments: false
 ---
 
 [BatchMP Tools](https://github.com/akpw/batch-mp-tools) provide variety of options of exploring media files right from the command line. For examples, to quickly see base media info such as duration, format, bit/sample rate, metadata tags, etc.:
