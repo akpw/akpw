@@ -1,7 +1,7 @@
 /*:
  ## Practical GCD, Part I: Introduction to queues
- > This is the playground with sample code for the following [blog](http://localhost:4000/articles/2016/04/15/GCD-I.html)
- ***
+ > This is the playground with sample code for the following [blog](http://www.akpdev.com/articles/2016/04/15/GCD-I.html)
+ ****
  [First Page](QOS%20Basics) | [Previous](@previous) | [Next](@next)
  */
 import Foundation
