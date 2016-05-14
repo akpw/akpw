@@ -4,7 +4,7 @@ title: "Swift concurrency series: bird's-eye view "
 description: "Swift concurrency series"
 category: articles
 tags: [iOS, OSX, Apple Swift, Concurrency, Mobile Development, Linux]
-comments: true
+comments: false
 ---
 
 Since its announcement in mid 2014, Swift has been on the roll already jumping up to 18th of the 20 most popular languages and getting even more ground after being open-sourced in December 2015:

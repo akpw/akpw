@@ -17,7 +17,7 @@ The main focus is rather on testing multiple implementations of a specific inter
 
 All examples shown in article are a part of [the sample project](https://github.com/akpw/SwiftNetworkImages), which you can download and run / test in Xcode.
 
-**The initial problem definition**
+**Initial problem definition**
 
 Let's say we have an app that does something with network images. An essential functionality would be some kind of service that can retrieve an image by its URL:
 
@@ -29,10 +29,9 @@ protocol NetworkImageService {
     func requestImage(urlString: String, completion: Result<UIImage> -> Void)
 }
 {% endhighlight %}
-
-### Test Spec
-
 Let's propose the following simplified functional test spec for the service:
+
+#### Test Spec
 
 _GIVEN an image URL, fetch the image and provide it to completion closure on the main thread. WHEN there are problems with connection THEN provide a descriptive error. WHEN not able to process received content THEN provide a descriptive error._
 
@@ -90,13 +89,13 @@ struct NetworkImageServiceImpl: NetworkImageService {
 {% endhighlight %}
 We should be all done with preparations and ready to write the test spec code.
 
-**The Test Spec in Code**
+**Test Spec in Code**
 
 From looking at the original [test spec](#test-spec), the obvious core functionality of our service is fetching an image by its URL. It also needs to be able to handle several potential error scenarios.
 
 Let's use [httpbin.org](https://httpbin.org) as our target test server. With this, the test spec code could be written as the following:
 
-### Test Spec in Code
+#### Test Spec in Code
 
 {% highlight swift %}
 class NetworkImageServiceImplSpec: QuickSpec {
@@ -248,7 +247,7 @@ The question is, how should we go about writing tests for our multiple image ser
 
 Luckily, Quick supports the concept of shared assertions. It allows us to define a group of common scenarios and then execute it within contexts of multiple test specs.
 
-On the technical end, this requires writing a custom `QuickConfiguration` class and overriding its `configure` function. It is a common way to influences Quick's behavior when running specs, and it also can be used to create a group of shared assertions with a unique name and associated `SharedExampleClosure` closure:
+On the technical end, this requires writing a custom `QuickConfiguration` class and overriding its `configure` function. It is a common way to influence Quick's behavior when running specs, and it also can be used to create a group of shared assertions with a unique name and associated `SharedExampleClosure` closure:
 {% highlight swift %}
 public typealias SharedExampleClosure = (SharedExampleContext) -> ()
 {% endhighlight %}
@@ -414,7 +413,7 @@ All that's all!
 Let's run the tests, check that everything goes as `expect`ed, and have a beer or two with that troublesome author of the extra image service... 🍻🍻
 
 
-***Conclusion***
+**Conclusion**
 
 The article went through common steps of behavior-driven development with [Quick](https://github.com/Quick/Quick) / [Nimble](https://github.com/Quick/Nimble), and covered the case of applying the same set of test specifications to multiple related functional units.
 
