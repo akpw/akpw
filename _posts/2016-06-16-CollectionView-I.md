@@ -13,7 +13,7 @@ The power of Collection View is in its remarkable flexibility, with totally cust
 
 **Global Header**
 
-This article is about extending the concept of collection view section headers via adding a configurable, pinnable, and stretchable <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/akp_l.gif"> _global header_. That will allow building UI interfaces like the one shown here, which comes a part of the [sample app](https://github.com/akpw/SwiftNetworkImages). The sample app project relies on a simple,configurable [custom layout](https://github.com/akpw/AKPFlowLayout/blob/master/AKPFlowLayout/AKPFlowLayout.swift) that can used in your project to enable the same kind of functionality. The layout works with both iOS8 and iOS9, and is optimized for performance via
+This article is about extending the concept of collection view section headers via adding a configurable, pinnable, and stretchable <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/akp_l.gif"> _global header_. That will allow building UI interfaces like the one shown here, which comes a part of the [sample app](https://github.com/akpw/SwiftNetworkImages). The sample app project relies on a simple, configurable [custom layout](https://github.com/akpw/AKPFlowLayout/blob/master/AKPFlowLayout/AKPFlowLayout.swift) that can used in your project to enable the same kind of functionality. The layout works with both iOS8 and iOS9, and is optimized for performance via
 using invalidation contexts to rebuild only those parts of UI that actually changed during scrolling.
 
 ### Requirements
@@ -245,15 +245,57 @@ override public func invalidationContextForBoundsChange(newBounds: CGRect)
 Since we are handling the layout for sections, we need to take care of invalidating those affected by relevant changes.  For all other cases, we rely on `UICollectionViewFlowLayout` to do its part of the job.
 
 
-**iOS9 and the floating section headers**
+**Just one more thing**
 
-At that point, we are mostly done. However, as specified by [requirements](#requirements) our custom layout has to support both iOS8 and iOS9.
+At that point, we are mostly done! However the [requirements](#requirements) mention `sectionHeadersPinToVisibleBounds`, which is a boolean property of `UICollectionViewFlowLayout` that enables out-of-the-box of sticky headers in iOS9. Since we are now explicitly managing the sections headers, we also need to make sure there is no interference with the built-in implementation. The easiest way might be doing something along of lines of:
+{% highlight swift %}
+override public var sectionHeadersPinToVisibleBounds: Bool {
+    didSet {
+        if sectionHeadersPinToVisibleBounds {
+            print("NO!!! 🙀")
+            sectionHeadersPinToVisibleBounds = false
+        }
+    }
+}
+{% endhighlight %}
+
+However the `sectionHeadersPinToVisibleBounds` property is not available in iOS8, and so far there seems to be no reasonable way to use Swift property observers with conditional compilation. Luckily we can always fall back to using KVO:
+
+{% highlight swift %}
+override public init() {
+    super.init()
+    if #available(iOS 9.0, *) {
+        addObserver(self, forKeyPath: "sectionHeadersPinToVisibleBounds",
+                                                options: .New, context: &AKPFlowLayoutKVOContext)
+    }
+}
+deinit {
+    if #available(iOS 9.0, *) {
+        removeObserver(self, forKeyPath: "sectionHeadersPinToVisibleBounds", context: &AKPFlowLayoutKVOContext)
+    }
+}
+override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?,
+                                            change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    if context == &AKPFlowLayoutKVOContext {
+        if let newValue = change?[NSKeyValueChangeNewKey],
+            boolValue = newValue as? Bool where boolValue {
+            print("AKPFlowLayout supports sticky headers by default, therefore " +
+                "the built-in functionality via sectionHeadersPinToVisibleBounds has been disabled")
+            if #available(iOS 9.0, *) { sectionHeadersPinToVisibleBounds = false }
+        }
+    } else {
+        super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+    }
+}
+{% endhighlight %}
+
+This way our custom layout would work both for iOS8 and iOS9, and for the latter we made sure there would be no collision with the built-in sticky headers functionality.
 
 
 ***Conclusion***
 
 The article went through major steps of implementing a custom  collection view flow layout, extending the concept of sections headers according to specific [requirements](#requirements).
 
-The code shown in article is a part of [sample app](https://github.com/akpw/SwiftNetworkImages), which you can download and run / test in Xcode.
+The custom layout code shown in article is available as [an open source framework](https://github.com/akpw/AKPFlowLayout), accompanied by the [sample app](https://github.com/akpw/SwiftNetworkImages) that you can download and run / test in Xcode.
 
 * * *
