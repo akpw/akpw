@@ -24,9 +24,9 @@ using invalidation contexts to rebuild only those parts of UI that actually chan
 
 In general, a good way to get into custom layouts is to start with built-in Flow Layout.  Given it covers a large range of line-oriented layouts with notion of rows and columns, tweaking `UICollectionViewFlowLayout` is often the best and fastest way to achieve desired customizations. Apple strongly recommends this approach, and provides [specific scenarios for subclassing UICollectionViewFlowLayout](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/UsingtheFlowLayout/UsingtheFlowLayout.html#//apple_ref/doc/uid/TP40012334-CH3-SW4).
 
-That is clearly no exception for our case. Since flow layout already comes with the concept of section headers and footers, all we need to do is to leverage it and to build on top.
+That is clearly no exception for our case. Since flow layout already comes with support for section headers and footers, all we need to do is to leverage it and to build on top.
 
-Before diving into implementation, there are a few things to consider regarding the very concept of global section header. Since collection view sections are data driven, shell we count on the data source to provide for our global section as well? Or perhaps shall it rather be treated as a static part of the layout, similar to decoration views?
+Before diving into implementation, there are a few things to consider regarding the concept of global section header. Since collection view sections are data driven, shell we count on the data source to provide for our global section as well? Or perhaps shall it rather be treated as a static part of the layout, similar to decoration views?
 
 There are obviously multiple possible approaches, including the one shown at a [WWDC 2014 session: Advanced User Interfaces with Collection Views](https://developer.apple.com/videos/play/wwdc2014/232/). The session introduced the idea of aggregate data sources, which among many other things include support for global sections.
 
@@ -34,7 +34,7 @@ After some thinking on the subject, my preference was towards keeping things sim
 
 **Custom Layout Attributes**
 
-Since the [requirements](#requirements) include section header stretching, our custom layout will have to manipulate headers' frames. The dynamic height changes will need to be propagated back to collection view items, so that they can adjust their layout in corresponding `applyLayoutAttributes:` methods. In order to enable such communication, let's subclass `UICollectionViewLayoutAttributes` and define the `stretchFactor` property:
+Since the [requirements](#requirements) include section header stretching, our custom layout will have to manipulate the headers' frames. The dynamic height changes should be propagated back to collection view items, so that they can adjust their layout in corresponding `applyLayoutAttributes:` methods. In order to enable such communication, let's subclass `UICollectionViewLayoutAttributes` and define the `stretchFactor` property:
 {% highlight swift %}
 public class AKPFlowLayoutAttributes: UICollectionViewLayoutAttributes {
     /// Set by AKPFlowLayout when managing section headers stretching
@@ -60,11 +60,11 @@ As collection view copies layout attribute objects, we need to conform to the NS
 
 **Section headers in a rect**
 
-A typical central place for any custom layout implementation is the `layoutAttributesForElementsInRect:` function, which  returns an array of layout attributes containing a layout attribute for each cell, supplementary, or decoration view that should be displayed in the passed rectangle.
+The central place for a custom layout implementation is typically in the `layoutAttributesForElementsInRect:` function, which  returns an array of layout attributes containing a layout attribute for each cell, supplementary, or decoration view that should be displayed in the passed rectangle.
 
-Since we're going to move forward with our implementation via subclassing `UICollectionViewFlowLayout`, most of the key ingredients should already be provided to us out of the box.
+Since we're going to move forward with our implementation via subclassing `UICollectionViewFlowLayout`, most of the key ingredients there should already be provided to us out of the box.
 
-The core idea is to simply add our custom sections' layout attributes to those already handled by `UICollectionViewFlowLayout`.
+The main idea is to simply add our custom sections' layout attributes to those already handled by `UICollectionViewFlowLayout`.
 
 Let's start with writing a few helper functions that will help us deal with the custom sections.
 
@@ -203,9 +203,11 @@ Finally, we also need to manage sections' `zIndex`, so the global header and sti
 
 **Invalidation**
 
-The key to building high-performance layout is to recompute only what's really changed. This way when e.g. user scrolls, our custom layout does not end up repeatedly calling computationally intensive `layoutAttributesForElementsInRect:` but instead whenever possible calls `layoutAttributesForSupplementaryViewOfKind` directly.
+The key to building high-performance layout is to recompute only what's really changed. This way when a user scrolls, our custom layout will not end up repeatedly calling computationally intensive `layoutAttributesForElementsInRect:` but instead whenever possible will call `layoutAttributesForSupplementaryViewOfKind` directly.
 
-To do that, we need a custom invalidation context to handle our portion of the layout while letting `UICollectionViewFlowLayout` to take care of the rest.
+For our case, instead of defining our own custom invalidation context class with `invalidationContextClass` it is sufficient to plug into the invalidation process of `UICollectionViewFlowLayout`.
+
+More specifically, since we are now handling the layout for collection view sections we should also take care of invalidating those that are affected by bounds changes:
 
 {% highlight swift %}
 override public func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
@@ -214,7 +216,7 @@ override public func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) ->
     }
     return true
 }
-/// Custom invalidation context
+/// Custom invalidation
 override public func invalidationContextForBoundsChange(newBounds: CGRect)
                                     -> UICollectionViewLayoutInvalidationContext {
     guard _shouldDoCustomLayout,
@@ -230,7 +232,7 @@ override public func invalidationContextForBoundsChange(newBounds: CGRect)
 
     // Origin changes?
     if oldBounds.origin != newBounds.origin {
-        // find and invalidate sections that would fall into the new bounds
+        // find and invalidate the sections that would fall into the new bounds
         guard let sectionIdxPaths = sectionsHeadersIDxs(forRect: newBounds) else {return invalidationContext}
 
         // then invalidate
@@ -242,12 +244,9 @@ override public func invalidationContextForBoundsChange(newBounds: CGRect)
 }
 {% endhighlight %}
 
-Since we are handling the layout for sections, we need to take care of invalidating those affected by relevant changes.  For all other cases, we rely on `UICollectionViewFlowLayout` to do its part of the job.
-
-
 **Just one more thing**
 
-At that point, we are mostly done! However the [requirements](#requirements) mention `sectionHeadersPinToVisibleBounds`, which is a boolean property of `UICollectionViewFlowLayout` that enables out-of-the-box of sticky headers in iOS9. Since we are now explicitly managing the sections headers, we also need to make sure there is no interference with the built-in implementation. The easiest way might be doing something along of lines of:
+At that point, we are almost done! However the [requirements](#requirements) mention `sectionHeadersPinToVisibleBounds`, which is a boolean property of `UICollectionViewFlowLayout` that enables out-of-the-box sticky headers in iOS9. Since we are now explicitly managing the sections headers, we also need to make sure there is no interference with the built-in implementation. The easiest way might be doing something along of lines of:
 {% highlight swift %}
 override public var sectionHeadersPinToVisibleBounds: Bool {
     didSet {
@@ -259,7 +258,7 @@ override public var sectionHeadersPinToVisibleBounds: Bool {
 }
 {% endhighlight %}
 
-However the `sectionHeadersPinToVisibleBounds` property is not available in iOS8, and so far there seems to be no reasonable way to use Swift property observers with conditional compilation. Luckily we can always fall back to using KVO:
+The problem is that the `sectionHeadersPinToVisibleBounds` property is not available in iOS8, and so far there seems to be no reasonable way to use Swift property observers with conditional compilation. Luckily, we can still fall back to using KVO:
 
 {% highlight swift %}
 override public init() {
@@ -289,7 +288,7 @@ override public func observeValueForKeyPath(keyPath: String?, ofObject object: A
 }
 {% endhighlight %}
 
-This way our custom layout would work both for iOS8 and iOS9, and for the latter we made sure there would be no collision with the built-in sticky headers functionality.
+This way our custom layout would work both for iOS8 and iOS9, and there also would be no collision with the iOS9 built-in sticky headers functionality.
 
 
 ***Conclusion***
