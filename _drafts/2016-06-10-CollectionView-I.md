@@ -7,56 +7,80 @@ tags: [iOS, Apple Swift, UICollectionView, Mobile Development]
 comments: true
 ---
 
-`UICollectionView` is an extremely powerful UIKit component, which since its introduction in iOS6 has become a typical choice for broad range of UI layouts with non-trivial complexity.
+`UICollectionView` is an extremely capable UIKit component, which since its introduction in iOS6 has enabled a broad variety of attractive UI layouts.
 
-The power of Collection View is in its flexibility, with totally custom layouts and sleek dynamic, interactive transitions between them. This is also the main reason why proper handling of these aspects requires experience and sometimes could be way more complex compared to dealing with the rest of UIKit.
+The power of Collection View is in its remarkable flexibility, with totally custom layouts and sleek dynamic interactive transitions between them. That flexibility is also the main reason why proper handling of these aspects requires experience and sometimes could be way more complex compared to dealing with the rest of UIKit.
 
-**Advanced Headers**
+**Global Header**
 
-This article is about extending the concept of section headers via adding a configurable pinnable, stretchable <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/akp_l.gif"> _global header_. That will allow building UI interfaces as the one shown here, which comes a part of the [sample app](https://github.com/akpw/SwiftNetworkImages). The sample app project relies on a simple, configurable [custom layout](https://github.com/akpw/AKPFlowLayout/blob/master/AKPFlowLayout/AKPCollectionViewFlowLayout.swift) that can be easily dropped into your project to enable same kind of functionality. The layout works with iOS9, and is optimized for performance via
-using `invalidation contexts` to rebuild only those parts of UI that actually changed while scrolling.
+This article is about extending the concept of collection view section headers via adding a configurable, pinnable, and stretchable <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/akp_l.gif"> _global header_. That will allow building UI interfaces like the one shown here, which comes a part of the [sample app](https://github.com/akpw/SwiftNetworkImages). The sample app project relies on a simple,configurable [custom layout](https://github.com/akpw/AKPFlowLayout/blob/master/AKPFlowLayout/AKPFlowLayout.swift) that can used in your project to enable the same kind of functionality. The layout works with both iOS8 and iOS9, and is optimized for performance via
+using invalidation contexts to rebuild only those parts of UI that actually changed during scrolling.
 
 ### Requirements
 
-Collection view flow layouts support the notion of headers and footers, and as of iOS9 also have a built-in support for floating section headers similar to those seen in `UITableView`. In addition to that, we want to be able to optionally add a `global header` that would always stay on top and also be stretchable. When a global header is on, the other sections should be sticking to it, otherwise they should behave exactly as defined by the flow layout `sectionHeadersPinToVisibleBounds` property.
-
+> The build-in collection view flow layout has the notion of section headers and footers, and as of iOS9 also provides built-in support for floating section headers similar to those seen in table views. In addition to that, we want to be able to optionally add a _global header_ that would always stay on top and be stretchable. When a global header is turned on, the other sections should be sticking to it when scrolling otherwise they should behave exactly as defined by the flow layout's `sectionHeadersPinToVisibleBounds` property. The layout should work for both iOS8 and iOS9.
 
 **Getting started**
 
-A good way to get into custom layouts is to start with built-in `UICollectionViewFlowLayout`.  Given Flow Layouts cover a broad range of line-oriented layouts with notion of rows and columns, tweaking UICollectionViewFlowLayout is often the best and fastest way to cover specific custom requirements.
+In general, a good way to get into custom layouts is to start with built-in Flow Layout.  Given it covers a large range of line-oriented layouts with notion of rows and columns, tweaking `UICollectionViewFlowLayout` is often the best and fastest way to achieve desired customizations. Apple strongly recommends this approach, and provides [specific scenarios for subclassing UICollectionViewFlowLayout](https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/CollectionViewPGforIOS/UsingtheFlowLayout/UsingtheFlowLayout.html#//apple_ref/doc/uid/TP40012334-CH3-SW4).
 
-That is no exception for our case as well. Since flow layouts already come with the concept of headers and footers, all we need to do is to leverage it and to build on top.
+That is clearly no exception for our case. Since flow layout already comes with the concept of section headers and footers, all we need to do is to leverage it and to build on top.
 
-One additional consideration is what should be the source of data for our global section. Since collection view sections are data driven, shell we count on the data source to provide for our global section as well? Or perhaps shall it rather be treated as a static part of the layout, similar to decoration views?
+Before diving into implementation, there are a few things to consider regarding the very concept of global section header. Since collection view sections are data driven, shell we count on the data source to provide for our global section as well? Or perhaps shall it rather be treated as a static part of the layout, similar to decoration views?
 
-There are obviously many possible approaches, including the one shown at a [WWDC 2014 session: Advanced User Interfaces with Collection Views](https://developer.apple.com/videos/play/wwdc2014/232/). The session introduces the concept of aggregate data sources, which among many other things include support for global sections.
+There are obviously multiple possible approaches, including the one shown at a [WWDC 2014 session: Advanced User Interfaces with Collection Views](https://developer.apple.com/videos/play/wwdc2014/232/). The session introduced the idea of aggregate data sources, which among many other things include support for global sections.
 
-After some considerations, my preference was towards keeping things simple and flexible. Our custom layout will rely on collection view datasource to provide the global section, and it will simply assume that it is the first section there. This way there is no need for dedicated hierarchy of data sources, and it allows our custom layout to be useful in a smart way without unnecessarily bloating things up.
+After some thinking on the subject, my preference was towards keeping things simple and flexible. Our custom layout will rely on collection view datasource to provide the global section, and it will simply assume that it will be the first section there. This way there is no need for dedicated hierarchy of data sources, and it will allow our custom layout to be useful in a smart way without unnecessarily bloating things up.
+
+**Custom Layout Attributes**
+
+Since the [requirements](#requirements) include section header stretching, our custom layout will have to manipulate headers' frames. The dynamic height changes will need to be propagated back to collection view items, so that they can adjust their layout in corresponding `applyLayoutAttributes:` methods. In order to enable such communication, let's subclass `UICollectionViewLayoutAttributes` and define the `stretchFactor` property:
+{% highlight swift %}
+public class AKPFlowLayoutAttributes: UICollectionViewLayoutAttributes {
+    /// Set by AKPFlowLayout when managing section headers stretching
+    public var stretchFactor: CGFloat = 0
+
+    override public func copyWithZone(zone: NSZone) -> AnyObject {
+        let aCopy = super.copyWithZone(zone) as! AKPFlowLayoutAttributes
+        aCopy.stretchFactor = stretchFactor
+        return aCopy
+    }
+
+    override public func isEqual(object: AnyObject?) -> Bool {
+        if let attributes = object as? AKPFlowLayoutAttributes {
+            if attributes.stretchFactor == stretchFactor {
+                return super.isEqual(object)
+            }
+        }
+        return false
+    }
+}
+{% endhighlight %}
+As collection view copies layout attribute objects, we need to conform to the NSCopying protocol and implement the relevant methods.
 
 **Section headers in a rect**
 
-Since we want to base our implementation on subclassing `UICollectionViewFlowLayout`, most of the key ingredients are already provided to us out of the box.
+A typical central place for any custom layout implementation is the `layoutAttributesForElementsInRect:` function, which  returns an array of layout attributes containing a layout attribute for each cell, supplementary, or decoration view that should be displayed in the passed rectangle.
 
-The core idea is to plug into the `layoutAttributesForElementsInRect:` function and simply add our custom sections to the regular layoutAttributes created and handled by `UICollectionViewFlowLayout`
-Let's start with writing a few helper functions that will help us deal with custom sections.
+Since we're going to move forward with our implementation via subclassing `UICollectionViewFlowLayout`, most of the key ingredients should already be provided to us out of the box.
 
-First, let's calculate the indexes of all sections confined in a rect. That should include our custom sections, both the global one and the custom headers "sticking" to it according to the [requirements](#requirements):
+The core idea is to simply add our custom sections' layout attributes to those already handled by `UICollectionViewFlowLayout`.
+
+Let's start with writing a few helper functions that will help us deal with the custom sections.
+
+First, let's calculate the indexes of all sections confined in a rect. That should include our custom sections, both the global one and the custom headers that should be "sticking" to it according to the [requirements](#requirements):
 
 {% highlight swift %}
-/// Given a rect, calculates indexes of confined section headers
-/// including the custom headers
+// Given a rect, calculates indexes of all confined section headers
+// _including_ the custom headers
 private func sectionsHeadersIDxs(forRect rect: CGRect) -> Set<Int>? {
-    guard let layoutAttributes = super.layoutAttributesForElementsInRect(rect) else {return nil}
-
-    let assosiatedWithSectionHeader: (attributes: UICollectionViewLayoutAttributes) -> Bool = {
-        return  ( self.layoutOptions.contains(.SectionsPinToGlobalHeaderOrVisibleBounds) &&
-                                                            $0.representedElementCategory == .Cell )
-            || $0.representedElementKind == UICollectionElementKindSectionHeader
-    }
+    guard let layoutAttributes = super.layoutAttributesForElementsInRect(rect)
+                                                as? [AKPFlowLayoutAttributes] else {return nil}
+    let sectionsShouldPin = layoutOptions.contains(.SectionsPinToGlobalHeaderOrVisibleBounds)
 
     var headersIdxs = Set<Int>()
     for attributes in layoutAttributes
-                    where assosiatedWithSectionHeader(attributes: attributes) {
+            where attributes.visibleSectionHeader(sectionsShouldPin) {
         headersIdxs.insert(attributes.indexPath.section)
     }
     if layoutOptions.contains(.FirstSectionIsGlobalHeader) {
@@ -65,13 +89,13 @@ private func sectionsHeadersIDxs(forRect rect: CGRect) -> Set<Int>? {
     return headersIdxs
 }
 {% endhighlight %}
-The above code goes through layout attributes, checking if they are associated with a section and adding the matches to a set of indexes. In case of global section, we always want to have it so it adds its index to the set as well.
+The code goes through layout attributes, checking if they are associated with a section and adding the relevant ones to a set of indexes. In case of the global section, we always want to have it so it adds its index to the set as well.
 
-Now it's trivial to calculate the indexes of just the custom sections in a rect, _excluding_ the regular headers provided by `UICollectionViewFlowLayout`:
+Now it's trivial to calculate indexes of the custom sections in a rect, _excluding_ the regular headers provided by `UICollectionViewFlowLayout`:
 
 {% highlight swift %}
-/// Given a rect, calculates the indexes of confined custom section headers
-/// excluding the regular headers handled by UICollectionViewFlowLayout
+// Given a rect, calculates the indexes of confined custom section headers
+// _excluding_ the regular headers handled by UICollectionViewFlowLayout
 private func customSectionHeadersIdxs(rect: CGRect) -> Set<Int>? {
     guard let layoutAttributes = super.layoutAttributesForElementsInRect(rect),
           var sectionIdxs = sectionsHeadersIDxs(forRect: rect)  else {return nil}
@@ -85,28 +109,27 @@ private func customSectionHeadersIdxs(rect: CGRect) -> Set<Int>? {
 }
 {% endhighlight %}
 
-With this done, we are ready to write our custom `layoutAttributesForElementsInRect(:)` function as the following:
+With this done, we are ready to write our `layoutAttributesForElementsInRect(:)` function as the following:
 
 {% highlight swift %}
-/// Adds custom headers to the  UICollectionViewFlowLayout attributes
+/// Returns layout attributes for specified rectangle, with added custom headers
 override public func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-    guard _shouldDoCustomLayout else { return super.layoutAttributesForElementsInRect(rect) }
+    guard shouldDoCustomLayout else { return super.layoutAttributesForElementsInRect(rect) }
 
-    guard var layoutAttributes = super.layoutAttributesForElementsInRect(rect),
-        // calculate custom headers that should be confined in the rect
+    guard var layoutAttributes = super.layoutAttributesForElementsInRect(rect) as? [AKPFlowLayoutAttributes],
+          // calculate custom headers that should be confined in the rect
           let customSectionHeadersIdxs = customSectionHeadersIdxs(rect) else { return nil }
 
-    // now add our custom headers to the regular UICollectionViewFlowLayout layoutAttributes
+    // add the custom headers to the regular UICollectionViewFlowLayout layoutAttributes
     for idx in customSectionHeadersIdxs {
         let indexPath = NSIndexPath(forItem: 0, inSection: idx)
         if let attributes = super.layoutAttributesForSupplementaryViewOfKind(
-                                                        UICollectionElementKindSectionHeader,
-                                                        atIndexPath: indexPath) {
-            // add the custom headers to the layout attributes
+                                                UICollectionElementKindSectionHeader,
+                                                atIndexPath: indexPath) as? AKPFlowLayoutAttributes {
             layoutAttributes.append(attributes)
         }
     }
-    // for section headers in layoutAttributes, now time to adjust their attributes
+    // for section headers in layoutAttributes, need to adjust their attributes
     for attributes in layoutAttributes where
         attributes.representedElementKind == UICollectionElementKindSectionHeader {
             (attributes.frame, attributes.zIndex) = adjustLayoutAttributes(forSectionAttributes: attributes)
@@ -115,13 +138,15 @@ override public func layoutAttributesForElementsInRect(rect: CGRect) -> [UIColle
 }
 {% endhighlight %}
 
-The code above adds attributes for the custom sections to array of regular layout attributes, and then adjusts those so the global section is top and all other sections behave according to the [requirements](#requirements). The adjustment code is a bit on the lengthy side though still relatively straightforward:
+The code above adds our custom sections attributes to the array of regular layout attributes, and then adjusts those so that the global section is always top and all other sections behave according to the [requirements](#requirements).
+
+The `adjustLayoutAttributes:` function is a bit on the lengthy side though still relatively straightforward:
 
 {% highlight swift %}
-// Adjusts frames of section headers
-private func adjustLayoutAttributes(
-                forSectionAttributes sectionHeadersLayoutAttributes: UICollectionViewLayoutAttributes)
-                                                            -> (CGRect, Int) {
+// Adjusts layout attributes of section headers
+private func adjustLayoutAttributes(forSectionAttributes
+                                        sectionHeadersLayoutAttributes: AKPFlowLayoutAttributes)
+                                                                                         -> (CGRect, Int) {
     guard let collectionView = collectionView else { return (CGRect.zero, 0) }
     let section = sectionHeadersLayoutAttributes.indexPath.section
     var sectionFrame = sectionHeadersLayoutAttributes.frame
@@ -137,6 +162,7 @@ private func adjustLayoutAttributes(
     //   (adjusting a few more things along the way)
     var offset = collectionView.contentOffset.y + collectionView.contentInset.top
     if (section > 0) {
+        // The global section
         if layoutOptions.contains(.SectionsPinToGlobalHeaderOrVisibleBounds) {
             if layoutOptions.contains(.FirstSectionIsGlobalHeader) {
                 // A global header adjustment
@@ -146,26 +172,38 @@ private func adjustLayoutAttributes(
         }
     } else {
         if layoutOptions.contains(.FirstSectionStretchable) && offset < 0 {
-            // A stretchy header adjustment
-            sectionFrame.size.height = firstSectionHeight - offset
+            // Stretchy header
+            if firstSectionHeight - offset < firsSectionMaximumStretchHeight {
+                sectionFrame.size.height = firstSectionHeight - offset
+                sectionHeadersLayoutAttributes.stretchFactor = fabs(offset)
+                previousStretchFactor = sectionHeadersLayoutAttributes.stretchFactor
+            } else {
+                // here we need to limit the stretch
+                sectionFrame.size.height = firsSectionMaximumStretchHeight
+                sectionHeadersLayoutAttributes.stretchFactor = previousStretchFactor
+            }
             sectionFrame.origin.y += offset + firstSectionInsets.top
         } else if layoutOptions.contains(.FirstSectionIsGlobalHeader) {
-            // A global header adjustment
+            // Sticky header position needs to be relative to the global header
             sectionFrame.origin.y += offset + firstSectionInsets.top
         } else {
             sectionFrame.origin.y = min(max(offset, minY), maxY)
         }
     }
-    return (sectionFrame, section > 0 ? _zIndexForSectionHeader : _zIndexForSectionHeader + 1)
+    return (sectionFrame, zIndexForSection(section))
 }
 {% endhighlight %}
 
-Basically, it establishes the section boundaries of (minY, maxY) and based on that configures `sectionFrame.origin.y` so it tries to follow the content offset. We also need to adjust `zIndex`, so the global header and sticky headers are always on top.
+Basically, the function first establishes the section boundaries of (minY, maxY) and then based on that configures `sectionFrame.origin.y` so it intelligently follows the collection view content offset.
+
+If stretching a header, the section frame height is set accordingly and the stretch information is recorded in our custom layout attributes `stretchFactor` property.
+
+Finally, we also need to manage sections' `zIndex`, so the global header and sticky headers are always on top.
 
 
 **Invalidation**
 
-The key to building high-performance layout is to recompute only what's really changed. This way when e.g. user scrolls, our layout does not end endlessly calling computationally intensive `layoutAttributesForElementsInRect` but instead just makes a single call directly to `layoutAttributesForSupplementaryViewOfKind` thus minimizing the amount of data it recomputes.
+The key to building high-performance layout is to recompute only what's really changed. This way when e.g. user scrolls, our custom layout does not end up repeatedly calling computationally intensive `layoutAttributesForElementsInRect:` but instead whenever possible calls `layoutAttributesForSupplementaryViewOfKind` directly.
 
 To do that, we need a custom invalidation context to handle our portion of the layout while letting `UICollectionViewFlowLayout` to take care of the rest.
 
@@ -204,12 +242,17 @@ override public func invalidationContextForBoundsChange(newBounds: CGRect)
 }
 {% endhighlight %}
 
-Since we are handling the layout sections, we need to take care of invalidating those affected by relevant changes.  For all other cases, we rely on `UICollectionViewFlowLayout` to do its part of heavy lifting/
+Since we are handling the layout for sections, we need to take care of invalidating those affected by relevant changes.  For all other cases, we rely on `UICollectionViewFlowLayout` to do its part of the job.
+
+
+**iOS9 and the floating section headers**
+
+At that point, we are mostly done. However, as specified by [requirements](#requirements) our custom layout has to support both iOS8 and iOS9.
 
 
 ***Conclusion***
 
-The article went through major steps of implementing a custom  collection view layout, extending the concept of sections via adding a configurable global section.
+The article went through major steps of implementing a custom  collection view flow layout, extending the concept of sections headers according to specific [requirements](#requirements).
 
 The code shown in article is a part of [sample app](https://github.com/akpw/SwiftNetworkImages), which you can download and run / test in Xcode.
 

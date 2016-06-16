@@ -4,7 +4,7 @@ title: "Making your Quick test code DRYer with  Shared Assertions"
 description: "Swift Testing"
 category: articles
 tags: [iOS, Apple Swift, BDD, Testing, Quick / Nimble, Mobile Development]
-comments: true
+comments: false
 ---
 
 One of the key aspects of [behavior-driven development](https://en.wikipedia.org/wiki/Behavior-driven_development), or BDD, is about using natural language to describe system behavior and expected outcomes. While semantically not that different from traditional unit-testing, it does help in cross-team communication and puts focus on viewing things from end user's perspective.
