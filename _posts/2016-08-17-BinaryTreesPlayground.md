@@ -13,9 +13,9 @@ comments: true
 + [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
 
 --------
-Swift Playgrounds has always been a great showcase for the language, and it is not surprising that one of the recurring topics mentioned by people after WWDC 2016 is the new Playgrounds app for iPad.
+Swift Playgrounds has always been a great showcase for the language, and now one of the recurring topics mentioned by people after WWDC 2016 is the new Playgrounds app for iPad.
 
-After playing with the app in one of the early iOS10 betas, I seriously wondered if that finally will be the key enabler for Apple's efforts in the edu market. Making all these thick books and courses manuals interactive and easy-to-play-with is definitely something that teachers and students are going to like a lot.
+Playing with the app for the first time in one of the early iOS10 betas made me seriously wondered if that finally will be the key enabler for Apple's efforts in the edu market. Making all these thick books and courses manuals interactive and easy-to-play-with is definitely something that teachers and students are going to like a lot.
 
 As Swift3 got closer to the 'no-source-breaking changes' milestone, I thought it'd be interesting to play with the playgrounds some more and do something edu-related that could also be useful in regular projects.
 
@@ -28,8 +28,7 @@ So after a few weekends, here is a short video right from the iPad app showing s
 
 The playground can be downloaded from here.
 
-
-The rest of the series is a dive into Swift 3 implementation, and goes deep into protocols with assosiated types and things like Core Graphics, Core Animation, CALayers, UIScrollView, etc. Oh, and not to forget "Core Crusty" :)<img style="float: right; margin: 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/crusty.png">
+The rest of the series is a deep dive into the Swift 3 implementation details, and goes into protocols with assosiated types (PATs), Core Graphics, Core Animation, CALayers, UIScrollView, etc. Oh, and not to forget our Crusty! 👻 <img style="float: right; margin: 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/crusty.png">
 
 Read on to find more.
 
