@@ -9,7 +9,7 @@ comments: true
 
 
 + [Introduction & Summary]({% post_url 2016-08-17-BinaryTreesPlayground %})
-+ Part I: Drawable Trees with Pluggable Traversals
++ [Part I: Drawable Binary Tree with Pluggable Traversal]({% post_url 2016-08-16-BinaryTreesPlayground-Part-I %})
 + [Part II: Tree Layout Rendering and Core Crusty]({% post_url 2016-08-15-BinaryTreesPlayground-Part-II %})
 + [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
 

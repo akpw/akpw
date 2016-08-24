@@ -7,6 +7,20 @@ tags: [iOS, Apple Swift, Algorithms and Data Structures, Playgrounds, PATs, Scro
 comments: true
 ---
 
+
++ [Introduction & Summary]({% post_url 2016-08-17-BinaryTreesPlayground %})
++ [Part I: Drawable Binary Tree with Pluggable Traversal]({% post_url 2016-08-16-BinaryTreesPlayground-Part-I %})
++ Part II: Tree Layout Rendering and Core Crusty
++ [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
+
+
+--------
+This blog is a part of the series about visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-17-BinaryTreesPlayground %}) provides an overall summary including a short demo taken in the Swift Playground for iPad app.
+
+Since visualizing trees requires defining a binary tree that can be drawn, this part goes into just that. This is not meant to be an exhaustive description of a perfect Swift tree implementation, more like touching on the core principles for specific purposes of the series.
+
+
+
 It's been well over a month past WWDC 2016, and as the dust has been settling a lot of people has been covering all the majour announcements. One of the most recurring topics is playgrounds on iPad
 
 Given Swift3 is accepting breaking code changes and Xcode beta3 is relatively stable, thought it'd be interesting
@@ -15,10 +29,6 @@ Given Swift3 is accepting breaking code changes and Xcode beta3 is relatively st
 **Playgrounds for iPad**
 primarily for education, to teach people how torwrite code. Since , ... visualizing data structures.
 <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/tree1.png">
-
-
-
-<iframe width="895" height="656" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/VisualBinaryTrees.mp4?autoplay=false&cc_load_policy=0" frameborder="0" allowfullscreen></iframe>
 
 
 **Tree Drawing**

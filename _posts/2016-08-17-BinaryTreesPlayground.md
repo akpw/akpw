@@ -13,13 +13,13 @@ comments: true
 + [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
 
 --------
-Swift Playgrounds has always been a great showcase for the language, and now one of the recurring topics mentioned by people after WWDC 2016 is the new Playgrounds app for iPad.
+Swift Playgrounds has always been a great showcase for the language.  After WWDC 2016, this has been elevated even further via the new Playgrounds app for iPad.
 
-Playing with the app for the first time in one of the early iOS10 betas made me seriously wondered if that finally will be the key enabler for Apple's efforts in the edu market. Making all these thick books and courses manuals interactive and easy-to-play-with is definitely something that teachers and students are going to like a lot.
+Playing with the app for the first time in one of the early iOS10 betas made me seriously wonder if that finally will give Apple the key to the edu market. While not their first dedicated product venture (remember [eMac](https://en.wikipedia.org/wiki/EMac)?), this is  definitely Apple's first serious edu software directly focused on the needs of the market. By all early indications so far, it should get them lots of iPads sales there as well as establishing interesting opportunities  for the technical writers. Making all these thick books and courses manuals interactive and easy-to-play-with is definitely something that both students and their teachers are going to like a lot.
 
 As Swift3 got closer to the 'no-source-breaking changes' milestone, I thought it'd be interesting to play with the playgrounds some more and do something edu-related that could also be useful in regular projects.
 
-Since learning how to write code eventually gets to base data structures and algorithms, the idea was to visualize binary trees and its common operations. While there are already tools such as [VisuAlgo.net](http://visualgo.net), having a visual tree representation right in a Swift playground should be useful both for learning and for real work.
+Since learning how to write code eventually gets to base data structures and algorithms, the idea was to visualize binary trees and their common operations. While there are tools such as [VisuAlgo.net](http://visualgo.net), having an instant visual tree representation right in a Swift playground would definitely be useful both for learning and for real work.
 
 So after a few weekends, here is a short video right from the iPad app showing some features such as base tree drawing and visualization of pluggable traversals:
 <video width="700" height="526" controls="true">
