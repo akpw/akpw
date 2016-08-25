@@ -9,7 +9,7 @@ comments: true
 
 
 + [Introduction & Summary]({% post_url 2016-08-17-BinaryTreesPlayground %})
-+ [Part I: Drawable Binary Tree with Pluggable Traversal]({% post_url 2016-08-16-BinaryTreesPlayground-Part-I %})
++ [Part I: QuickLook-able Binary Tree with Pluggable Traversals]({% post_url 2016-08-16-BinaryTreesPlayground-Part-I %})
 + Part II: Tree Layout Rendering and Core Crusty
 + [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
 
@@ -19,6 +19,9 @@ This blog is a part of the series about visualizing binary trees with Swift 3. [
 
 Since visualizing trees requires defining a binary tree that can be drawn, this part goes into just that. This is not meant to be an exhaustive description of a perfect Swift tree implementation, more like touching on the core principles for specific purposes of the series.
 
+In this part, we defined a binary tree with pluggable traversals and came to the following requirements:
+
+> Visualize any tree that conforms to the  [base protocol](#base-tree-protocol) above. If that tree is [traversable](#traversable-tree), also visualize its current traversal
 
 
 It's been well over a month past WWDC 2016, and as the dust has been settling a lot of people has been covering all the majour announcements. One of the most recurring topics is playgrounds on iPad

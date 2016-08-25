@@ -9,22 +9,24 @@ comments: true
 
 
 + [Introduction & Summary]({% post_url 2016-08-17-BinaryTreesPlayground %})
-+ [Part I: Drawable Binary Tree with Pluggable Traversal]({% post_url 2016-08-16-BinaryTreesPlayground-Part-I %})
++ Part I:  QuickLook-able Binary Tree with Pluggable Traversals
 + [Part II: Tree Layout Rendering and Core Crusty]({% post_url 2016-08-15-BinaryTreesPlayground-Part-II %})
 + [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
 
 
 --------
-This blog is a part of the series about visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-17-BinaryTreesPlayground %}) provides an overall summary including a short demo taken in the Swift Playground for iPad app.
+This blog is a part of the series about visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-17-BinaryTreesPlayground %}) provides an overall context and summary including a short demo taken in the Swift Playground for iPad app.
 
-Since visualizing trees requires defining a binary tree that can be drawn, this part goes into just that. This is not meant to be an exhaustive description of a perfect Swift tree implementation, more like touching on the core principles for specific purposes of the series.
+Since visualizing trees first requires defining some sort of _quicklookable binary tree_, this part goes into just that. It is not meant to be an exhaustive description of a perfect Swift tree implementation, more like touching on the core principles for specific purposes of the series.
+
+After reading this part, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations.
 
 
 **Binary Tree in Swift**
 
 Swift is a rich and flexible language, and it is no different when it comes to implementing binary trees. The classic way is of course via reference types, and in Swift it is also [possible with enums](https://airspeedvelocity.net/2015/07/22/a-persistent-tree-using-indirect-enums-in-swift/).
 
-As both approaches are perfectly valid for their use-cases, we want something that would represent a drawable tree regardless of its implementation details.
+As both approaches are valid for their use-cases, we want something that would represent a drawable tree regardless of its implementation details.
 
 With that in mind, let's define our tree as the following:
 
@@ -77,9 +79,9 @@ extension TreeNodeEnum: BinaryTree {
     }
 }
 {% endhighlight %}
-Since our [base tree protocol](#base-tree-protocol) intentionally makes element non-optional, the only 'trade-off' here is that the root node should never be `.empty`. In other words the root tree node should always have its element, and `.empty` should only be used to denote missing children. While this restriction could be avoided via making the tree protocol element optional, given [the core visualization requirements](#requirements) this seems to be a cleaner approach.
+Since our [base tree protocol](#base-tree-protocol) intentionally makes element non-optional, the only design "trade-off" is that the tree should should always be initialized with an element. While this restriction could be avoided via making the tree protocol element optional, this seemed to be a cleaner approach.
 
-With that out of the way, let's define a few common tree properties via Swift protocol extensions:
+With that out of the way, let's define a few common properties via Swift protocol extensions:
 
 {% highlight swift %}
 extension BinaryTree {
@@ -116,16 +118,55 @@ extension BinaryTree {
 }
 {% endhighlight %}
 
-These are just a few properties that can be done at the protocol extension level, and the cool thing is that all these  will be available to any tree implementation conforming to the base protocol, be it a reference type or enum.
+These are just a few that can be done at the protocol extension level, and the cool thing is that all of them  will be available to any tree implementation conforming to the base protocol, be it a reference type or enum.
+
+Now that we have our base tree, let's outline the visualization interface for both Playgrounds and the Xcode debugger:
+{% highlight swift %}
+public protocol QuickLookableBinaryTree: BinaryTree, CustomPlaygroundQuickLookable {
+    var quickLookView: (_ rootNode: Self) -> UIView { get }
+}
+extension QuickLookableBinaryTree {
+    /// Playground quick look
+    public var customPlaygroundQuickLook: PlaygroundQuickLook {
+        let treeView = quickLookView(self)
+        return PlaygroundQuickLook(reflecting: treeView)
+    }
+
+    /// Xcode debugger visualization
+    public func debugQuickLookObject() -> Any? {
+        return quickLookImage
+    }
+
+    /// Visualization as an image
+    public var quickLookImage: UIImage? {
+        let treeView = quickLookView(self)
+
+        UIGraphicsBeginImageContextWithOptions(treeView.bounds.size, true, 0)
+        defer { UIGraphicsEndImageContext() }
+
+        treeView.drawHierarchy(in: treeView.bounds, afterScreenUpdates: true)
+        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
+        return image
+    }
+
+    /// Configures visual tree representation
+    public var quickLookView: (Self) -> UIView {
+        // Default Tree View configuration
+        return DefaultTreeDrawingConfig.configureTreeView
+    }
+}
+{% endhighlight %}
+
+In terms of its usage, `QuickLookableBinaryTree` is a fairly undemanding protocol that has all of its requirements covered by an extension.
 
 At that point we've established the ground-level infrastructure and can move on to the core visualization part. But before that, let's bring one more thing to the table.
 
 
 **Binary tree with pluggable traversals**
 
-By now, we have a definition of a binary tree that already is ready to be visualized. However since the power of binary trees comes both from their internal structure and the ways they can be processed, it would be nice to extend our requirements a bit to include visualizing traversals as well.
+By now, we have a definition of a binary tree that is ready to be visualized. However since the power of binary trees comes both from their internal organization and the ways they can be processed, it would be nice to extend our requirements to also include visualizing traversals.
 
-Traversals are often implemented as a part of the tree itself, though they can also be viewed as external behavior that should be injected rather than hard-coded. That would definitely give us more flexibility in design, so lets follow along these lines and enable pluggable traversals using the [strategy pattern](https://en.wikipedia.org/wiki/Strategy_pattern).
+Traversals are often implemented as a part of the tree itself, though they can be viewed as external behavior that should be injected rather than hard-coded. That would definitely give us more flexibility in design, so lets follow along these lines and enable pluggable traversals using the [strategy pattern](https://en.wikipedia.org/wiki/Strategy_pattern).
 
 First, let's define a traversal strategy as:
 {% highlight swift %}
@@ -175,7 +216,8 @@ There are many other things that can be done via protocol extensions, but since 
 
 ###### Sample Reference Tree
 {% highlight swift %}
-public final class TreeNodeRef<Element: Comparable>: TraversableBinaryTree {
+public final class TreeNodeRef<Element: Comparable>: QuickLookableBinaryTree,
+                                                     TraversableBinaryTree  {
     fileprivate(set) public var element: Element
     fileprivate(set) public var left: TreeNodeRef?
     fileprivate(set) public var right: TreeNodeRef?
@@ -184,7 +226,7 @@ public final class TreeNodeRef<Element: Comparable>: TraversableBinaryTree {
     public var traversalStrategy: TraversalStrategy.Type? = InOrderTraversalStrategy.self
     public init(_ element: Element) { self.element = element }
 }
-extension TreeNodeRef {
+extension TreeNodeRef: BinarySearchTree {
     public func insert(_ element: Element) {
         if element < self.element {
             if let l = left { l.insert(element) }
@@ -197,9 +239,9 @@ extension TreeNodeRef {
 }
 {% endhighlight %}
 
-And that's it! Our `TreeNodeRef` comes with all capabilities and properties defines in the protocols, such as `count`, `height`, `isBalanced` as well as ability to print out its elements and all standard functionality of Swift sequences.
+And that's it! Our `TreeNodeRef` comes with all capabilities and properties defines in the protocols, such as `count`, `height`, `isBalanced` as well as ability to print out its elements and all standard functionality of Swift sequences. Finally, `QuickLookableBinaryTree` makes sure it now can be visualized in Xcode and on iPad.
 
-A sample enum implementation follows the same lines, though is a bit longer since we need to insert our traversal into root element:
+A sample enum implementation follows the same lines, though is a bit longer since we need to deal with traversals:
 
 ###### Sample Enum Tree with pluggable traversal
 {% highlight swift %}
@@ -212,11 +254,12 @@ public indirect enum TreeNodeEnumTraversal<Element: Comparable> {
     public init(_ element: Element,
                 left: TreeNodeEnumTraversal = .empty,
                 right: TreeNodeEnumTraversal = .empty,
-                traversal: TraversalStrategy.Type? = nil) {
+                // default is in-order traversal
+                traversal: TraversalStrategy.Type? = InOrderTraversalStrategy.self) {
         self = .node(value: element, left: left, right: right, traversal: traversal)
     }
 }
-extension TreeNodeEnumTraversal: BinaryTree {
+extension TreeNodeEnumTraversal: QuickLookableBinaryTree {
     public var left: TreeNodeEnumTraversal? {
         if case let .node(value: _, left: left, right: _, traversal: _) = self {
             if case .empty = left { return nil }
@@ -240,35 +283,42 @@ extension TreeNodeEnumTraversal: BinaryTree {
 }
 extension TreeNodeEnumTraversal: TraversableBinaryTree {
     public var traversalStrategy: TraversalStrategy.Type? {
-        if case let .node(value: _, left: _, right: _, traversal: traversal) = self {
-            return traversal.self
+        get {
+            if case let .node(value: _, left: _, right: _, traversal: traversal) = self {
+                return traversal.self
+            }
+            return nil
         }
-        return nil
+        set(newValue) {
+            if case let .node(value, left, right, _) = self {
+                self = TreeNodeEnumTraversal(value, left: left, right: right, traversal: newValue)
+            }
+        }
     }
 }
-extension TreeNodeEnumTraversal {
+extension TreeNodeEnumTraversal: BinarySearchTree {
     public func insert(_ element: Element, traversalStrategy: TraversalStrategy.Type? = nil) -> TreeNodeEnumTraversal {
         switch self {
         case .empty:
             return TreeNodeEnumTraversal(element, left: .empty, right: .empty, traversal: traversalStrategy)
         case let .node(value, left, right, traversal):
             if element < value {
-                return TreeNodeEnumTraversal(element, left: left.insert(value), right: right, traversal: traversal)
+                return TreeNodeEnumTraversal(value, left: left.insert(element), right: right, traversal: traversal)
             } else {
-                return TreeNodeEnumTraversal(element, left: left, right: right.insert(value), traversal: traversal)
+                return TreeNodeEnumTraversal(value, left: left, right: right.insert(element), traversal: traversal)
             }
         }
     }
 }
 {% endhighlight %}
 
-The playground contains more examples of concrete tree implementations, such as enabling initializing the tree from sequences, building trees with minimal height, etc.
+[The playground](https://github.com/akpw/VisualBinaryTrees) contains more examples of concrete tree implementations, such as enabling initializing the tree from sequences, building trees with minimal height, etc.
 
 **Conclusion**
 
-In this part, we defined a binary tree with pluggable traversals and came to the following requirements:
+In this part, we defined a binary tree with pluggable traversals that can be visualised both in in Swift playground and the Xcode debugger.
 
-> Visualize any tree that conforms to the  [base protocol](#base-tree-protocol) above. If that tree is [traversable](#traversable-tree), also visualize its current traversal
+At that point, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations.
 
 The [next part]({% post_url 2016-08-15-BinaryTreesPlayground-Part-II %}) will proceed with building the tree drawing infrastructure, with pluggable algorithms for building multiple types tree layouts.
 

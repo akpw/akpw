@@ -7,6 +7,13 @@ tags: [iOS, Apple Swift, Algorithms and Data Structures, Playgrounds, PATs, Scro
 comments: true
 ---
 
++ [Introduction & Summary]({% post_url 2016-08-17-BinaryTreesPlayground %})
++ [Part I: QuickLook-able Binary Tree with Pluggable Traversals]({% post_url 2016-08-16-BinaryTreesPlayground-Part-I %})
++ [Part II: Tree Layout Rendering and Core Crusty]({% post_url 2016-08-15-BinaryTreesPlayground-Part-II %})
++ [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
+
+
+--------
 It's been well over a month past WWDC 2016, and as the dust has been settling a lot of people has been covering all the majour announcements. One of the most recurring topics is playgrounds on iPad
 
 Given Swift3 is accepting breaking code changes and Xcode beta3 is relatively stable, thought it'd be interesting
