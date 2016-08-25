@@ -3,7 +3,7 @@ layout: post
 title: "Visualizing Binary Trees with Swift 3 Playgrounds, Part III"
 description: "Swift 3 Playgrounds"
 category: articles
-tags: [iOS, Apple Swift, Algorithms and Data Structures, Playgrounds, PATs, ScrollView, CoreGraphics, Mobile Development]
+tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures, PATs, ScrollView, CoreGraphics]
 comments: true
 ---
 

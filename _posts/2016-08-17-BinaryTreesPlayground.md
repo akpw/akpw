@@ -3,7 +3,7 @@ layout: post
 title: "Visual Binary Trees with Swift 3 Playgrounds: Introduction"
 description: "Swift 3 Playgrounds"
 category: articles
-tags: [iOS, Apple Swift, Playgrounds, Algorithms and Data Structures, Mobile Development]
+tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures]
 comments: true
 ---
 
