@@ -24,7 +24,7 @@ So after a few weekends, here is a short video right from the iPad app showing s
 <source src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/VisualBinaryTrees.mp4" type="video/mp4" />
 </video>
 
-And a similar screenshot in Xcode: <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/tree3.png">
+And a similar screenshot in Xcode: <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/tree4.png">
 
 Without further ado, the standalone playground[^1] is now [available at github](https://github.com/akpw/VisualBinaryTrees) and ready to run in Xcode 8.0 beta 6.
 
