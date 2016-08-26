@@ -8,14 +8,11 @@ comments: true
 ---
 
 
-+ [Introduction & Summary]({% post_url 2016-08-17-BinaryTreesPlayground %})
++ [Introduction & Summary]({% post_url 2016-08-26-BinaryTreesPlayground %})
 + Part I:  QuickLook-able Binary Tree with Pluggable Traversals
-+ [Part II: Tree Layout Rendering and Core Crusty]({% post_url 2016-08-15-BinaryTreesPlayground-Part-II %})
-+ [Part III: Animating Traversals]({% post_url 2016-08-14-BinaryTreesPlayground-Part-III %})
-
 
 --------
-This blog is a part of the series about visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-17-BinaryTreesPlayground %}) provides an overall context and summary including a short demo taken in the Swift Playground for iPad app.
+This blog is a part of the series about visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary including a short demo taken in the Swift Playground for iPad app.
 
 Since visualizing trees first requires defining some sort of _quicklookable binary tree_, this part goes into just that. It is not meant to be an exhaustive description of a perfect Swift tree implementation, more like touching on the core principles for specific purposes of the series.
 
@@ -316,9 +313,9 @@ extension TreeNodeEnumTraversal: BinarySearchTree {
 
 **Conclusion**
 
-In this part, we defined a binary tree with pluggable traversals that can be visualised both in in Swift playground and the Xcode debugger.
+In this part, we defined a _binary tree with pluggable traversals that can be visualised_ both in in Swift playground and the Xcode debugger.
 
 At that point, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations.
 
-The [next part]({% post_url 2016-08-15-BinaryTreesPlayground-Part-II %}) will proceed with building the tree drawing infrastructure, with pluggable algorithms for building multiple types tree layouts.
+The next part will proceed with building the tree drawing infrastructure, with pluggable algorithms for building multiple types tree layouts.
 
