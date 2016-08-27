@@ -82,7 +82,9 @@ With that out of the way, let's define a few common properties via Swift protoco
 
 {% highlight swift %}
 extension BinaryTree {
-    public static func ==(lhs: Self, rhs: Self) -> Bool { return lhs.element == rhs.element }
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+        return (lhs.element == rhs.element) && lhs.left == rhs.left && lhs.right == rhs.right
+    }
 
     public var count: Int { return (left?.count ?? 0) + 1 + (right?.count ?? 0) }
 
@@ -216,8 +218,8 @@ There are many other things that can be done via protocol extensions, but since 
 public final class TreeNodeRef<Element: Comparable>: QuickLookableBinaryTree,
                                                      TraversableBinaryTree  {
     fileprivate(set) public var element: Element
-    fileprivate(set) public var left: TreeNodeRef?
-    fileprivate(set) public var right: TreeNodeRef?
+    public var left: TreeNodeRef?
+    public var right: TreeNodeRef?
 
     // default is in-order traversal
     public var traversalStrategy: TraversalStrategy.Type? = InOrderTraversalStrategy.self
@@ -317,5 +319,5 @@ In this part, we defined a _binary tree with pluggable traversals that can be vi
 
 At that point, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations.
 
-The next part will proceed with building the tree drawing infrastructure, with pluggable algorithms for building multiple types tree layouts.
+The next part will proceed with the tree drawing infrastructure and pluggable algorithms for building multiple types tree layouts.
 

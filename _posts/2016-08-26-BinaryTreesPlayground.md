@@ -35,6 +35,6 @@ If at that point you are ready to go and play with the [playground](https://gith
 If on the other hand you want more details on how to use it with your own trees, or interested in Swift 3 implementation, or perhaps just curious about the general problem of optimal visual layouts for arbitrary trees -- [keep reading]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %}) for a deep dive into things like protocols with associated types (PATs), history of tree layouts, overall architecture (largely attributed to Crusty 👻), <img style="float: right; margin: 0px 0px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/crusty.png"> used technology, etc.
 
 * * *
-[^1]: A framework version embeddable into Xcode projects via Carthage / CocoaPods is due after Swift 3 is finalized
+[^1]: An embeddable framework version under MIT license is TBD after Swift 3 is finalized
 
 
