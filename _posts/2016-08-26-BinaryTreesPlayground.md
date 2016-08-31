@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Visual Binary Trees with Swift 3 Playgrounds: Introduction"
+title: "Visual Binary Trees with Swift 3: Introduction"
 description: "Swift 3 Playgrounds"
 category: articles
 tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures]
@@ -28,7 +28,7 @@ And a similar screenshot in Xcode: <img style="float: right; margin: 10px 0px 0p
 
 Without further ado, the standalone playground[^1] is now [available at github](https://github.com/akpw/VisualBinaryTrees) and ready to run in Xcode 8.0 beta 6.
 
-_Since the Swift Playgrounds for iPad app in iOS10 Beta 7 is still behind the latest Swift 3 syntax, it can not be currently run there till the next (and hopefully last) iOS10 Beta_.
+_Since the Swift Playgrounds for iPad app in iOS10 Beta 8 is still behind the latest Swift 3 syntax, it can not be currently run there till the next (and hopefully last) iOS10 Beta_.
 
 If at that point you are ready to go and play with the [playground](https://github.com/akpw/VisualBinaryTrees), that is completely fine.
 
