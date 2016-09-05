@@ -4,7 +4,7 @@ title: "Visual Binary Trees with Swift 3, Part I"
 description: "Swift 3 Playgrounds"
 category: articles
 tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures, PATs]
-comments: true
+comments: false
 ---
 
 
@@ -124,6 +124,7 @@ Now that we have our base tree, let's outline the visualization interface for bo
 public protocol QuickLookableBinaryTree: BinaryTree, CustomPlaygroundQuickLookable {
     var quickLookView: (_ rootNode: Self) -> UIView { get }
 }
+/// CustomPlaygroundQuickLookable
 extension QuickLookableBinaryTree {
     /// Playground quick look
     public var customPlaygroundQuickLook: PlaygroundQuickLook {
@@ -147,7 +148,9 @@ extension QuickLookableBinaryTree {
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
         return image
     }
-
+}
+/// Default Visual Tree Config
+extension QuickLookableBinaryTree {
     /// Configures visual tree representation
     public var quickLookView: (Self) -> UIView {
         // Default Tree View configuration
@@ -158,7 +161,9 @@ extension QuickLookableBinaryTree {
 
 In terms of its usage, `QuickLookableBinaryTree` is a fairly undemanding protocol that has all of its requirements covered by an extension.
 
-At that point we've established the ground-level infrastructure and can move on to the core visualization part. But before that, let's bring one more thing to the table.
+The only question at the point might be, what does that `quickLookView` and its wierd `DefaultTreeDrawingConfig.configureTreeView` really do?
+
+Well, that is exactly what will uncover in the later parts of the series. But before we go there though, let's bring one more thing to the table.
 
 
 **Binary tree with pluggable traversals**
@@ -352,5 +357,6 @@ In this part, we defined a _binary tree with pluggable traversals that can be vi
 
 At that point, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations.
 
-The next part will proceed with describing the tree drawing architecture, pluggable algorithms for building multiple types tree layouts, and more -- keep tuned!
+The next part of the series will continue with describing the drawing architecture and customizations of its components. Starting with things like preset configurations for fonts, lines thickness, colors, grid, etc. and then moving on towards choosing a different 2D / 3D visualization technology, pluggable algorithms for multiple types of tree layouts, and more. Keep tuned!
+
 
