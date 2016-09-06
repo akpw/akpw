@@ -120,6 +120,8 @@ extension BinaryTree {
 These are just a few that can be done at the protocol extension level, and the cool thing is that all of them  will be available to any tree implementation conforming to the base protocol, be it a reference type or enum.
 
 Now that we have our base tree, let's outline the visualization interface for both Swift Playgrounds and the Xcode debugger:
+
+###### QuickLookable Binary Tree
 {% highlight swift %}
 public protocol QuickLookableBinaryTree: BinaryTree, CustomPlaygroundQuickLookable {
     var quickLookView: (_ rootNode: Self) -> UIView { get }
