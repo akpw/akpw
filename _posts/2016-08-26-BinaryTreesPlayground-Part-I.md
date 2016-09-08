@@ -10,7 +10,7 @@ comments: false
 
 + [Introduction & Summary]({% post_url 2016-08-26-BinaryTreesPlayground %})
 + Part I:  QuickLook-able Binary Tree with Pluggable Traversals
-+ [Part II: The Drawing Architecture, Customization, and Tree Layouts]({% post_url 2016-09-5-BinaryTreesPlayground-Part-II %})
++ [Part II: The Drawing Architecture, Customization, and Tree Layouts]({% post_url 2016-09-8-BinaryTreesPlayground-Part-II %})
 
 --------
 This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 GM.
@@ -363,6 +363,6 @@ In this part, we defined a _binary tree with pluggable traversals that can be vi
 
 At that point, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations.
 
-The next part of the series will continue with describing the drawing architecture and various customizations of its components. Starting with things like preset configurations for fonts, lines thickness, colors, grid, etc. and then moving on towards choosing a different 2D / 3D visualization technology, pluggable algorithms for multiple types of tree layouts, and more. [Keep tuned]({% post_url 2016-09-5-BinaryTreesPlayground-Part-II %})!
+The next part of the series will continue with describing the drawing architecture and various customizations of its components. Starting with things like preset configurations for fonts, lines thickness, colors, grid, etc. and then moving on towards choosing a different 2D / 3D visualization technology, pluggable algorithms for multiple types of tree layouts, and more. [Keep tuned]({% post_url 2016-09-8-BinaryTreesPlayground-Part-II %})!
 
 

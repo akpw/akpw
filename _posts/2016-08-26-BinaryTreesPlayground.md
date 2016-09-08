@@ -9,7 +9,7 @@ comments: false
 
 + Introduction & Summary
 + [Part I: QuickLook-able Binary Tree with Pluggable Traversals]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %})
-+ [Part II: The Drawing Architecture, Customization, and Tree Layouts]({% post_url 2016-09-5-BinaryTreesPlayground-Part-II %})
++ [Part II: The Drawing Architecture, Customization, and Tree Layouts]({% post_url 2016-09-8-BinaryTreesPlayground-Part-II %})
 
 --------
 Swift Playgrounds have always been a great showcase for the language, and now that was elevated even further with [the new Playgrounds app for iPad](https://www.apple.com/swift/playgrounds/).
