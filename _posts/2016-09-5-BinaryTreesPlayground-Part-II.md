@@ -3,7 +3,7 @@ layout: post
 title: "Visual Binary Trees with Swift 3, Part II"
 description: "Swift 3 Playgrounds"
 category: articles
-tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures, PATs]
+tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures, PATs, Binary Trees]
 comments: false
 ---
 
@@ -13,13 +13,13 @@ comments: false
 + Part II: The Drawing Architecture, Customization, and Tree Layouts
 
 --------
-This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 beta 6.
+This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 GM.
 
-In the earlier part of the series, we defined [base protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html/#base-tree-protocol) for a QuickLook-able Binary Swift Tree. Any tree implementation that conforms to that protocol can now be visualized, as described in details in [the previous blog]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %})
+In the previous part of the series, we defined [base protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html/#base-tree-protocol) for a QuickLook-able Binary Swift Tree. Any tree implementation that conforms to that protocol can now be visualized, as described in details in [the previous blog]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %})
 
 While this is already enough to start using the [playground](https://github.com/akpw/VisualBinaryTrees) for your own tree implementations, what if you need to customize the  visualization? Maybe just use your own presets for things like fonts, lines thickness and colors, drawing grid, etc. Or, choose a different 2D / 3D technology such as SpriteKit or SceneKit. Or leverage your own favorite algorithms for laying our a binary tree -- speaking of which, who said that the tree needs to be binary and not N-ary?
 
-The good news is that all of these are possible and relatively straightforward. After reading through this part, you should have a solid understanding of the drawing architecture and be in a good position to customize its components as outlined  above.
+The good news is that all of these options are possible and relatively straightforward. After reading through this part, you should have a solid understanding of the drawing architecture and be in a good position to customize its components as outlined  above.
 
 
 **The architecture**
@@ -54,7 +54,7 @@ extension QuickLookableBinaryTree {
 }
 {% endhighlight %}
 
-And now it should be a good time to look at what this wierd-looking `DefaultTreeDrawingConfig.configureTreeView` thing really is:
+And now it should be a good time to look at what this weird-looking `DefaultTreeDrawingConfig.configureTreeView` thing really is:
 
 {% highlight swift %}
 /// Provides default tree drawing configuration
@@ -272,9 +272,11 @@ While conceptually falling into the "almost simple" category 🤓, the hard prob
 
 To solve this, Reingold and Tilford started with breaking the problems into two parts: computation of the new positions for shifted subtrees and then its actual shifting.
 
-To address the first part, they then introduced several clever concepts such as tree contours and threads. Contours are sequences of left-most / right most nodes ion each level, and a node thread represents an additional relationship to the successor node in the same contour.
+To address the first part, they then introduced several clever concepts such as tree contours and threads. Contours are sequences of left-most and right most nodes for each level, and a node thread represents an additional relationship to the successor node in the same contour.
 
 To solve moving all nodes in a subtree by the same amount, they then used the concept of `mods` introduced earlier in the already mentioned paper by Charles Wetherell and Alfred Shannon[^2]. A `mod` is an additional property to each node, that is used for calculating position of all the node's children. The positions are calculated in two passes, first giving each node a preliminary position and a mod during the bottom-up sweep and then adjusting their positions during a top-down traversal via adding  aggregated sum of mods on the path from the root.
+
+This is how it looks in the `TreeLayout` extension used by the `TreeLayoutBuilderReingold`:
 
 {% highlight swift %}
 /// Additional TreeLayout attributes used for internal purposes
@@ -292,7 +294,7 @@ fileprivate extension TreeLayout {
             extras[TreeLayoutExtrasKey.xMod] = newValue
         }
     }
-    /// Threads help avoid traversing (lots of) the contour nodes that are not in direct parent/child relashinship,
+    /// Threads help avoid traversing (lots of) the contour nodes that are not in direct parent/child relationship,
     /// via creating links between these nodes
     var contourThread: TreeLayout? {
         get {
@@ -311,16 +313,16 @@ fileprivate extension TreeLayout {
 }
 {% endhighlight %}
 
-There is a more detailed description of this algorithms in a great paper of C. Buchheim, M. J Unger, and S. Leipert[^4]. That paper also takes tree drawing to yet another level, by introducing an efficient O(n) algorithm of drawing arbitrary N-ary trees.
+Full `TreeLayoutBuilderReingold` listing is a bit on the longish side, and is not shown here for practical purposes. For anyone curious to see how the above concepts are implemented, it lives [here](https://github.com/akpw/VisualBinaryTrees/blob/master/VisualBinaryTrees.playground/Sources/TreeDrawing/Layout/Builders/TreeLayoutBuilderReingold.swift) and should have enough comments for all key parts of the implementation.
 
-Another great resources on the subject is a Python magazine article by Bill Mill[^5], which is also available online [here](http://billmill.org/pymag-trees/). Bill goes through all of the above concepts, providing lots of Python code samples that really helps understanding things from the pragmatic developer perspective.
+There is a also more detailed description of the Reingold's et al. algorithms in a great paper of C. Buchheim, M. J Unger, and S. Leipert[^4]. Among other things, that paper also takes tree drawing to yet another level via describing an efficient, O(n) algorithm of drawing arbitrary N-ary trees.
+
+Another valuable resource on the subject is a Python magazine article by Bill Mill[^5], which is also available online.[^6] In addition to going through the  concepts, Bill is also providing lots of Python code samples that help understand things from the perspective of a pragmatic developer.
 
 
 ***Conclusion***
 
-The article went through major steps of implementing a custom collection view flow layout, extending the concept of sections headers according to specific [requirements](#requirements).
-
-The custom layout code shown in article is available as [an open source framework](https://github.com/akpw/AKPFlowLayout), accompanied by the [sample app](https://github.com/akpw/SwiftNetworkImages) that you can download and run / test in Xcode.
+This was the final part of the of the series on visualizing binary trees with Swift 3. At that point, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations as well as customizing the tree drawings with your own preset configurations and changing the architectural components for specific needs of your project.
 
 * * *
 [^1]: [Knuth, D.E. Acta Informatica (1971) 1: `Optimum binary search trees`](http://rd.springer.com/article/10.1007/BF00264289)
@@ -332,3 +334,6 @@ The custom layout code shown in article is available as [an open source framewor
 [^4]: [C. Buchheim, M. J Unger, and S. Leipert. Improving Walker's algorithm to run in linear time](https://www.researchgate.net/publication/226950337_Improving_Walker%27s_Algorithm_to_Run_in_Linear_Time)
 
 [^5]: [Bill Mill, Drawing Presentable Trees. Python Magazine for August 2008.](https://doughellmann.com/blog/2008/08/29/python-magazine-for-august-2008/)
+
+[^6]: [Bill Mill, Drawing Presentable Trees. Blog Article](http://billmill.org/pymag-trees/)
+

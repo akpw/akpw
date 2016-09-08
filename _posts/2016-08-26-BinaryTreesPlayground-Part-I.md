@@ -3,16 +3,17 @@ layout: post
 title: "Visual Binary Trees with Swift 3, Part I"
 description: "Swift 3 Playgrounds"
 category: articles
-tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures, PATs]
+tags: [iOS, Apple Swift, Playgrounds, Mobile Development, Algorithms and Data Structures, PATs, Binary Trees]
 comments: false
 ---
 
 
 + [Introduction & Summary]({% post_url 2016-08-26-BinaryTreesPlayground %})
 + Part I:  QuickLook-able Binary Tree with Pluggable Traversals
++ [Part II: The Drawing Architecture, Customization, and Tree Layouts]({% post_url 2016-09-5-BinaryTreesPlayground-Part-II %})
 
 --------
-This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 beta 6.
+This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 GM.
 
 Since visualizing trees requires defining some sort of _quicklookable binary tree_, this part goes into just that. It is not meant to be an exhaustive description of a perfect Swift tree implementation, more like touching on the core principles for specific purposes of the series.
 
@@ -76,7 +77,7 @@ extension TreeNodeEnum: BinaryTree {
     }
 }
 {% endhighlight %}
-Since our [base tree protocol](#base-tree-protocol) intentionally makes element non-optional, the only design "trade-off" is that the tree should should always be initialized with an element. While this restriction could be avoided via making the tree protocol element optional, this seemed to be a cleaner approach.
+Since our [base tree protocol](#base-tree-protocol) intentionally makes element non-optional, the only design "trade-off" is that the tree should should always be initialized with an element. While this restriction could be avoided via making the tree protocol element optional, this should be a cleaner approach.
 
 With that out of the way, let's define a few common tree properties via Swift protocol extensions:
 
@@ -138,6 +139,9 @@ extension QuickLookableBinaryTree {
     public var quickLookObject: PlaygroundQuickLook? {
         return customPlaygroundQuickLook
     }
+    public func debugQuickLookObject() -> AnyObject? {
+        return quickLookView(self)
+    }
 
     /// Visualization as an image
     public var quickLookImage: UIImage? {
@@ -163,7 +167,7 @@ extension QuickLookableBinaryTree {
 
 In terms of its usage, `QuickLookableBinaryTree` is a fairly undemanding protocol that has all of its requirements covered by an extension.
 
-The only question at the point might be, what does that `quickLookView` and its wierd `DefaultTreeDrawingConfig.configureTreeView` really do?
+The only question at the point might be, what does that `quickLookView` and its weird `DefaultTreeDrawingConfig.configureTreeView` really do?
 
 Well, that is exactly what will uncover in the later parts of the series. But before we go there though, let's bring one more thing to the table.
 
@@ -218,7 +222,7 @@ extension TraversableBinaryTree {
 
 With these few lines of code, we did quite a few things. Any tree conforming to this protocol can  now be injected with a traversal strategy of our choosing, and we also made this tree a sequence. So we can iterate over the tree nodes in any order we like and as a bonus there are all these useful std functions as `filter`, `map`, `flatMap`, etc. that are available on any sequence implementation.
 
-As a simple example of that, let makes another quick extension and give our trees a printable representation via their current traversal sequence:
+As a simple example of that, let makes another quick extension and give our tree a printable representation via its current traversal sequence:
 {% highlight swift %}
 public protocol TraversableBinaryTree: BinaryTree, Sequence,
                                                    CustomStringConvertible,
@@ -359,6 +363,6 @@ In this part, we defined a _binary tree with pluggable traversals that can be vi
 
 At that point, you should be fully up-to-date on how to use [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations.
 
-The next part of the series will continue with describing the drawing architecture and customizations of its components. Starting with things like preset configurations for fonts, lines thickness, colors, grid, etc. and then moving on towards choosing a different 2D / 3D visualization technology, pluggable algorithms for multiple types of tree layouts, and more. Keep tuned!
+The next part of the series will continue with describing the drawing architecture and various customizations of its components. Starting with things like preset configurations for fonts, lines thickness, colors, grid, etc. and then moving on towards choosing a different 2D / 3D visualization technology, pluggable algorithms for multiple types of tree layouts, and more. [Keep tuned]({% post_url 2016-09-5-BinaryTreesPlayground-Part-II %})!
 
 
