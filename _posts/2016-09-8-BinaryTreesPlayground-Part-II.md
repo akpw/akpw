@@ -15,16 +15,16 @@ comments: false
 --------
 This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 GM.
 
-In [the previous part of the series]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %}), we defined [base protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html/#base-tree-protocol) for a QuickLook-able Binary Swift Tree. Any tree implementation that conforms to that protocol can now be visualized in the playground as well as in the Xcode debugger.
+In [the previous part of the series]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %}), we defined [base protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#base-tree-protocol) for a QuickLook-able Binary Swift Tree. Any tree implementation that conforms to that protocol can now be visualized in the playground as well as in the Xcode debugger.
 
-While this is already enough to start using the [playground](https://github.com/akpw/VisualBinaryTrees) for your own tree implementations, what if you need to change the default visualization? Maybe just to use your own presets for things like fonts, lines thickness and colors, turning the grid off, etc. Or, choose a different 2D / 3D technology such as SpriteKit or SceneKit. Or leverage your own favorite algorithms for laying our a binary tree -- speaking of which, who said that the tree needs to be binary and not N-ary?
+While this is already enough to start using the [playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations, what if you need to change the default visualization? Maybe just to use your own presets for things like fonts, lines thickness and colors, turning the grid off, etc. Or, choose a different 2D / 3D technology such as SpriteKit or SceneKit. Or leverage your own favorite algorithms for laying our a binary tree. Speaking of which, who said that the tree needs to be binary and not N-ary?
 
-The good news is that all of these options are possible and relatively straightforward. After reading through this part, you should have a solid understanding of the drawing architecture and be in a good position to customize its components as outlined  above.
+The good news is all of these options are possible and also relatively straightforward. After reading through this part, you should have a solid understanding of the drawing architecture and be in a good position to customize its components as outlined  above.
 
 
 **The architecture**
 
-Let's go top-down and start with a high-level drawing architecture first. In a somewhat simplified form, it basically looks like this:
+Let's go top-down and start with the high-level drawing architecture first. In a somewhat simplified form, it basically looks like this:
 
 <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/renderer.png">
 
@@ -42,7 +42,7 @@ While switching `Renderers` is outside of this blog's scope, (if anyone feels li
 
 **Customizing the drawing**
 
-In the previous part of the series, we defined [QuickLookable Binary Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html/#quicklookable-binary-tree) protocol along with extensions for all of its requirements. One of these was specifically responsible for the visual tree representation:
+In the previous part of the series, we defined [QuickLookable Binary Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#quicklookable-binary-tree) protocol along with extensions for all of its requirements. One of these was specifically responsible for the visual tree representation:
 {% highlight swift %}
 /// Default Visual Tree Config
 extension QuickLookableBinaryTree {
@@ -161,7 +161,7 @@ public final class TreeLayout<Node: BinaryTree>: TreeLayoutTopology {
 
 A few things to notice there:
 
-* Unsurprisingly, `TreeLayout` itself is a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html/#traversable-tree) that is initialized with a tree node that conforms to the base [BinaryTree protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html/#base-tree-protocol). If that tree node also happens to be a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html/#traversable-tree), its traversal is copied during initialization. Then, the model simply builds itself after the tree node while assigning itself the initial (non-valid) `(x,y)` coordinates.
+* Unsurprisingly, `TreeLayout` itself is a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#traversable-tree) that is initialized with a tree node that conforms to the base [BinaryTree protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#base-tree-protocol). If that tree node also happens to be a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#traversable-tree), its traversal is copied during initialization. Then, the model simply builds itself after the tree node while assigning itself the initial (non-valid) `(x,y)` coordinates.
 
 * Since the layout model tree structure should not change after initialization, `TreeLayout` overrides the default implementation of its `height` property. That helps avoid quadratic time during initialization as well as in all future usages of the property.
 
