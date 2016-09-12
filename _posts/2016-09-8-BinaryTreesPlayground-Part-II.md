@@ -9,13 +9,13 @@ comments: false
 
 
 + [Introduction & Summary]({% post_url 2016-08-26-BinaryTreesPlayground %})
-+ [Part I: QuickLook-able Binary Tree with Pluggable Traversals]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %})
++ [Part I: QuickLook-able Binary Tree with Pluggable Traversals]({% post_url 2016-08-27-BinaryTreesPlayground-Part-I %})
 + Part II: The Drawing Architecture, Customization, and Tree Layouts
 
 --------
 This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 GM.
 
-In [the previous part of the series]({% post_url 2016-08-26-BinaryTreesPlayground-Part-I %}), we defined [base protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#base-tree-protocol) for a QuickLook-able Binary Swift Tree. Any tree implementation that conforms to that protocol can now be visualized in the playground as well as in the Xcode debugger.
+In [the previous part of the series]({% post_url 2016-08-27-BinaryTreesPlayground-Part-I %}), we defined [base protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/27/BinaryTreesPlayground-Part-I.html#base-tree-protocol) for a QuickLook-able Binary Swift Tree. Any tree implementation that conforms to that protocol can now be visualized in the playground as well as in the Xcode debugger.
 
 While this is already enough to start using the [playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations, what if you need to change the default visualization? Maybe just to use your own presets for things like fonts, lines thickness and colors, turning the grid off, etc. Or, choose a different 2D / 3D technology such as SpriteKit or SceneKit. Or leverage your own favorite algorithms for laying our a binary tree. Speaking of which, who said that the tree needs to be binary and not N-ary?
 
@@ -24,7 +24,7 @@ The good news is all of these options are possible and also relatively straightf
 
 **The architecture**
 
-Let's go top-down and start with the high-level drawing architecture first. In a somewhat simplified form, it basically looks like this:
+Let's go top-down and start with the high-level drawing architecture first. In a somewhat simplified form, it looks like this:
 
 <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/renderer.png">
 
@@ -32,17 +32,17 @@ Let's go top-down and start with the high-level drawing architecture first. In a
 
 Sounds kind of familiar so far? Well, if you saw the [WWDC 2015 Protocol-Oriented Programming session](https://developer.apple.com/videos/play/wwdc2015/408/) it definitely should be. <img style="float: right; margin: 0px 0px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/crusty.png"> That is also the reason why Crusty's friendly picture is all over this blog series.
 
-To draw a tree, our `TreeDrawing` needs the tree layout information that is provided to it by an implementation of `TreeLayoutBuilder` protocol. `TreeDrawing` then do its thing processing the layout, switching various drawing states and passing on instructions to the `Renderer`.
+To draw a tree, our `TreeDrawing` needs the tree layout information that is provided to it by an implementation of `TreeLayoutBuilder` protocol. `TreeDrawing` then do its thing processing the layout, switching states and passing on the drawing instructions to the `Renderer`.
 
 This base architecture already gives us plenty of flexibility and customization points.
 
-For example, the default `Renderer` implementation uses Core Graphics to draw the tree and a single animated `CAShapeLayer` to visualize traversals. Now simply switching to a different `Renderer` could easily give us things like e.g. 3D visualization with SceneKit. Or, perhaps someone would prefer a plain ASCII art drawings instead? I'm sure Crusty would be most pleased with these... 🤓
+For example, the default `Renderer` implementation uses Core Graphics to draw the tree and a single animated `CAShapeLayer` to visualize traversals. Switching to a different `Renderer` would give us entire different presentation, e.g. 3D visualization with technology like SceneKit. Or, perhaps someone would prefer a plain ASCII art instead? I'm sure Crusty would be most pleased with these... 🤓
 
-While switching `Renderers` is outside of this blog's scope, (if anyone feels like a little exercise -- the contributions to [the playground](https://github.com/akpw/VisualBinaryTrees) most welcomed!), we could also do quite a lot customization of the basic drawing aspects such as fonts, lines thickness, colors, grid, etc.
+While switching `Renderers` is outside of this blog's scope (if anyone feels like a little exercise -- the contributions to [the playground](https://github.com/akpw/VisualBinaryTrees) most welcomed!), we could also do plenty of customization for the basic drawing aspects such as fonts, lines thickness, colors, grid, etc.
 
 **Customizing the drawing**
 
-In the previous part of the series, we defined [QuickLookable Binary Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#quicklookable-binary-tree) protocol along with extensions for all of its requirements. One of these was specifically responsible for the visual tree representation:
+In the previous part of the series, we defined [QuickLookable Binary Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/27/BinaryTreesPlayground-Part-I.html#quicklookable-binary-tree) protocol along with the extensions covering all of its requirements. One of these was specifically responsible for the visual tree representation:
 {% highlight swift %}
 /// Default Visual Tree Config
 extension QuickLookableBinaryTree {
@@ -54,7 +54,7 @@ extension QuickLookableBinaryTree {
 }
 {% endhighlight %}
 
-And now it should be a good time to look at what this weird-looking `DefaultTreeDrawingConfig.configureTreeView` thing really is:
+At that point it should be a good time to look at what this `DefaultTreeDrawingConfig.configureTreeView` thing really is:
 
 {% highlight swift %}
 /// Provides default tree drawing configuration
@@ -91,18 +91,18 @@ public struct DefaultTreeDrawingConfig {
 }
 {% endhighlight %}
 
-Well, turns out it is nothing more than a little configuration helper that assembles the key pieces of the above architecture and feeds values to available customization points.
+Turns out it is nothing more than a little configuration helper, which assembles the key pieces of the above architecture and feeds values to available customization points.
 
-So in case you want to change any of these, writing another configuration struct along with overriding the `QuickLookableBinaryTree.quickLookView` variable on your tree type should be real easy now.
+So in case you want'd to change any of these, writing your own configuration struct along with overriding the `QuickLookableBinaryTree.quickLookView` variable on your tree type should be real easy.
 
 
 **Tree Layout Model**
 
 Now that we covered the overall drawing architecture, let's take a closer look on what's behind laying out an efficient visual tree representation.
 
-In general, the goal of all tree layout algorithms is to build a tree model where each node is assigned a unique `(x,y)` coordinate so that it can then be drawn in a visually meaningful way.
+In general, the goal of all tree layout algorithms is to build a tree model where each node is assigned a unique `(x,y)` coordinate so that it can be drawn in a visually meaningful way.
 
-To be a bit more specific, the following are the rules for what is considered to be "visually meaningful":
+The following are the rules for what is considered to be "visually meaningful":
 
 ##### Tree Layout requirements
 > * The layout reflects exact hierarchical structure of the tree
@@ -161,11 +161,11 @@ public final class TreeLayout<Node: BinaryTree>: TreeLayoutTopology {
 
 A few things to notice there:
 
-* Unsurprisingly, `TreeLayout` itself is a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#traversable-tree) that is initialized with a tree node that conforms to the base [BinaryTree protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#base-tree-protocol). If that tree node also happens to be a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/26/BinaryTreesPlayground-Part-I.html#traversable-tree), its traversal is copied during initialization. Then, the model simply builds itself after the tree node while assigning itself the initial (non-valid) `(x,y)` coordinates.
+* Unsurprisingly, `TreeLayout` itself is a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/27/BinaryTreesPlayground-Part-I.html#traversable-tree) and is initialized with a tree node that conforms to the base [BinaryTree protocol]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/27/BinaryTreesPlayground-Part-I.html#base-tree-protocol). If that tree node also happens to be a [Traversable Tree]({% if site.baseurl %}{{ site.baseurl }}{% endif %}/articles/2016/08/27/BinaryTreesPlayground-Part-I.html#traversable-tree), its traversal is copied during initialization. Then the layout simply builds itself after the tree node, with some initial `(x,y)` coordinates.
 
-* Since the layout model tree structure should not change after initialization, `TreeLayout` overrides the default implementation of its `height` property. That helps avoid quadratic time during initialization as well as in all future usages of the property.
+* Since the base tree structure of layout model will not change after initialization, `TreeLayout` overrides the default implementation of its `height` property. That helps avoid quadratic time during `init` as well as in all future usages of the property.
 
-* The layout is meant to be built in logical `Int` coordinates. These can be easily mapped to concrete physical dimensions later, with a few useful extension properties:
+* The layout is meant to be built in logical coordinates of `Int` type. These can be easily mapped to physical dimensions later on, with some useful extension properties:
 {% highlight swift %}
 extension TreeLayoutTopology {
     public var maxLogicalX: Int {
@@ -192,7 +192,7 @@ extension TreeLayoutTopology {
 }
 {% endhighlight %}
 
-* Finally, for the astute readers wondering about the purpose of that `extras` var -- some of the more complex algorithms need to define various additional layout properties, and this is a way of enabling just that. Subclassing the model would obviously be another option, however in this case it'd be by far less clean and effective (as should become apparent in next few moments).
+* Finally, for the astute readers wondering about the purpose of that `extras` var. Some of the more complex algorithms need to define various additional layout properties, and this is a way of enabling just that. Subclassing the model would obviously be another option, however it'd be by far less clean and effective (as should become apparent in next few moments).
 
 **The history of Tree Layouts**
 
@@ -200,9 +200,9 @@ At that point, we've defined our layout model and the only thing remaining is to
 
 Half of that already looks trivial, as for each node we should be able to easily figure out its `y` coordinate based on the node's depth. So what is all the fuss about the remaining `x`s?
 
-Well, turns out it is quite fascinating by itself and happens to be one of the classic NP-complete problems with a relatively long history and many contributions from leading computer scientists.
+Well, turns out it is quite fascinating by itself and for general case happens to be one of the classic NP-complete problems with a relatively long history and many contributions from leading computer scientists.
 
-One of the first layout algorithms was described by Donald Knuth[^1], and is basically a simple in-order traversal while incrementing a single x-position counter.
+One of the first tree layout algorithms was described by Donald Knuth[^1], and basically is a simple in-order traversal while incrementing a single x-position counter.
 {% highlight swift %}
 /// Base Layout Builders protocol
 public protocol TreeLayoutBuilder {
@@ -237,7 +237,7 @@ public struct TreeLayoutBuilderKnuth: TreeLayoutBuilder {
 Here is how it looks when used in the playground. <img style="width : 800px; height : 220px; float: right; margin: 0px 0px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/knuth.png">
 While being among the simplest and fastest algorithms, the drawback is that the x-coordinate is never reused and thus the layout is quickly doing wide. It can also easily digress into some weird tree shapes.
 
-A few years after Knuth, Charles Wetherell and Alfred Shannon[^2] came up with another simple and efficient technique for generating minimal width layouts. Instead of a single x-counter, they used independent counters per level. While processing the tree in pre-level order, each counter is updated independently and therefore layout width grows conservatively:
+A few years after Knuth, Charles Wetherell and Alfred Shannon[^2] came up with a number of interesting concepts including another simple and efficient technique for generating minimal width layouts. Instead of a single x-counter, they used independent counters per level. While processing the tree in pre-level order, each counter is updated independently and therefore the layout width grows conservatively:
 {% highlight swift %}
 public struct TreeLayoutBuilderWetherell: TreeLayoutBuilder {
     public mutating func buildLayout<Node: BinaryTree>(rootNode: Node, gridUnitSize: CGFloat) -> TreeLayout<Node> {
@@ -265,32 +265,36 @@ public struct TreeLayoutBuilderWetherell: TreeLayoutBuilder {
 <img style="width : 300px; height : 220px; float: right; margin: 0px 0px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/wetherell.png">
 
 From looking at the generated drawing of the same tree, the immediate observations are:
-* The minimal width property is indeed quite impressive!
-* It's hard to describe this layout as even remotely "visually meaningful" 😱
-* For larger trees, the layout also quickly becomes real hard to follow
+* The minimal width property is indeed quite impressive
 
-Two years later,  Edward Reingold and John Tilford[^3] continue building on the existing research and came up with several new concepts and the algorithm producing nicely shaped layouts according to the above [requirements](#tree-layout-requirements) while still running in O(n) time.
+* It's hard to describe this layout as even remotely "visually meaningful" 😱
+
+* For larger trees, the layout quickly becomes real hard to follow
+
+Two years later,  Edward Reingold and John Tilford[^3] continued building on the existing research and came up with several new ideas and the eventual algorithm producing nicely shaped layouts according to the above [requirements](#tree-layout-requirements) while still running in O(n) time.
 
 That algorithm is used as the default in [the playground](https://github.com/akpw/VisualBinaryTrees), and can be roughly described as the following:  <img style="width : 500px; height : 229px; float: right; margin: 0px 0px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/reingold.png">
 1. Recursively build the left and right model sub-trees
 
 2. Shift the right model sub-tree until on some layer it is as close to _the right of the left model sub-tree_ as possible
 
-3. Place the root vertically one level above and horizontally half way between its children. If there is only one child, place the root at the same x as the child
+3. Place the root vertically one level above and horizontally half-way between its children. If there is only one child, place the root at the same x as the child
 
-While conceptually falling into the "almost simple" category 🤓, the hard problem is how to make this algorithm run in linear time. Shifting subtrees via straightforward recursion would not work, as it would inevitably result in quadratic times.
+While conceptually in the "almost simple" category 🤓, the hard problem with the algorithm was how to make it run in linear time. Shifting subtrees via straightforward recursion would not work, as it would inevitably result in quadratic times.
 
-To solve this, Reingold and Tilford started with breaking the problem into two parts: computation of the new positions for shifted subtrees and then its actual shifting.
+To solve this, Reingold and Tilford started with breaking the problem into two parts:
+* Computation of the new positions for shifted subtrees
+* Actual subtree shifting
 
-To address the first part, they used several clever ideas such as _tree contours_ and _threads_.
+To address the first part, they introduced the concepts of _tree contours_ and _threads_.
 
-Tree contours are sequences of left-most and right-most nodes for each level.
+_Tree contours_ are sequences of left-most and right-most nodes for each level.
 
-A node's thread represents an additional relationship to the successor node in the same contour. While the name can be somewhat confusing, the threads are just extra links between relevant contour nodes that are not already in direct parent / child relationship. The threads purpose is to help reduce the amount of time needed to scan subtrees for their contours.
+A _node's thread_ represents an additional relationship to the successor node in the same contour. While the name can be somewhat confusing, the threads are just extra links between the contour nodes that are not already in direct parent / child relationship. The threads purpose is to help reduce the amount of time needed to scan subtrees for their contours.
 
-Next, to solve moving nodes in a subtree by the same amount they applied the concept of `mods` introduced earlier in the already mentioned paper by Charles Wetherell and Alfred Shannon[^2]. A `mod` is another additional property for each node, used to calculate positions of its children. These are calculated in two passes, first giving each node a preliminary position and a mod during the bottom-up sweep and then adjusting the positions during a top-down traversal via adding  aggregated sum of mods on the path from the root.
+Next, to solve moving nodes in a subtree they applied the `mods` property introduced earlier in the already mentioned paper by Charles Wetherell and Alfred Shannon. A `mod` is an additional property for each node, used to calculate positions of its children. These are then calculated in two passes, by first giving each node a preliminary position along with the mod during the bottom-up sweep and then adjusting these positions during a top-down traversal via adding  aggregated sum of mods on the path from the root.
 
-This is how all these extra properties look in the `TreeLayout` extension within the `TreeLayoutBuilderReingold` struct:
+Still with me? Let's see how these extra properties look in Swift code:
 
 {% highlight swift %}
 fileprivate struct TreeLayoutExtrasKey {
@@ -326,16 +330,16 @@ fileprivate extension TreeLayout {
 }
 {% endhighlight %}
 
-As full `TreeLayoutBuilderReingold` struct listing is a bit on the longish side, and is not shown here for practical purposes. For anyone curious to see how all of the above concepts are implemented, the code lives [here](https://github.com/akpw/VisualBinaryTrees/blob/master/VisualBinaryTrees.playground/Sources/TreeDrawing/Layout/Builders/TreeLayoutBuilderReingold.swift) and should have enough comments for the key parts of the algorithm.
+The full `TreeLayoutBuilderReingold` struct listing is a bit on the longish side, and is not shown here for practical purposes. For anyone curious to see how all of the above concepts are implemented, the code lives [here](https://github.com/akpw/VisualBinaryTrees/blob/master/VisualBinaryTrees.playground/Sources/TreeDrawing/Layout/Builders/TreeLayoutBuilderReingold.swift) and should have enough comments for the key parts of the algorithm.
 
-There is a also very detailed description of the Reingold's et al. algorithm in a great paper of C. Buchheim, M. J Unger, and S. Leipert[^4]. Among other things, that paper by itself takes the art of tree drawing to yet another level via describing an efficient, O(n) algorithm of laying out arbitrary N-ary trees.
+There is a detailed description of the Reingold's et al. algorithm in a great paper of C. Buchheim, M. J Unger, and S. Leipert[^4]. That paper by itself takes the art of tree drawing to yet another level, via describing an efficient, O(n) algorithm of laying out arbitrary N-ary trees.
 
-Another valuable resource on the subject is a Python magazine article by Bill Mill[^5], which is also available online.[^6] In addition to going through the concepts, Bill is providing lots of Python code samples that help understand things from the perspective of a pragmatic developer.
+Another valuable resource on the subject is a Python magazine article by Bill Mill[^5], which is also available online in Bill's blog.[^6] In addition to going through the concepts, Bill is providing lots of Python code samples that help understand things from the perspective of a pragmatic developer.
 
 
 ***Conclusion***
 
-This was the final part of the of the series on visualizing binary trees with Swift 3.
+This was the final part of the series on visualizing binary trees with Swift 3.
 
 At that point, you should be familiar with using the [the playground](https://github.com/akpw/VisualBinaryTrees) with your own tree implementations, as well as with customizing the tree drawings with your own preset configurations and changing the architectural components for specific needs of your project.
 
