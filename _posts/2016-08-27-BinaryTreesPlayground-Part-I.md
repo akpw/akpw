@@ -13,7 +13,7 @@ comments: false
 + [Part II: The Drawing Architecture, Customization, and Tree Layouts]({% post_url 2016-09-8-BinaryTreesPlayground-Part-II %})
 
 --------
-This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees) and is ready to run in the latest Xcode 8.0 GM.
+This blog is a part of the series on visualizing binary trees with Swift 3. [The introduction]({% post_url 2016-08-26-BinaryTreesPlayground %}) provides an overall context and summary, including a short demo taken in the Swift Playground for iPad app. The playground with sample code and practical examples is [available at github](https://github.com/akpw/VisualBinaryTrees).
 
 Since visualizing trees requires defining some sort of _quicklookable binary tree_, this part goes into just that. It is not meant to be an exhaustive description of a perfect Swift tree implementation, more like touching on the core principles for specific purposes of the series.
 

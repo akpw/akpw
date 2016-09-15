@@ -27,9 +27,7 @@ So after a few weekends, here is a short video right from the iPad app showing s
 
 And a similar screenshot in Xcode: <img style="float: right; margin: 10px 0px 0px 10px;" src="{% if site.baseurl %}{{ site.baseurl }}{% endif %}/images/tree4.png">
 
-Without further ado, the standalone playground[^1] is now [available at github](https://github.com/akpw/VisualBinaryTrees) and ready to run in the latest Xcode 8.0 GM.
-
-_Since Swift Playgrounds for iPad has been silently dropped from iOS10 GM, it can not currently run there till the Playgrounds app public release via App Store sometime later this fall._
+Without further ado, the standalone playground[^1] is now [available at github](https://github.com/akpw/VisualBinaryTrees) and ready to run both in Xcode 8.0 and the Swift Playgrounds for iPad app.
 
 If at that point you are ready to go and play with the [playground](https://github.com/akpw/VisualBinaryTrees), that is completely fine.
 
