@@ -1,6 +1,6 @@
 name: Development Blog
 url: "https://akpw.github.io"
-baseurl: "
+baseurl: ""
 description: ' on software and related things'
 
 #exclude: [Gemfile, Gemfile.lock, README.md]
