@@ -6,9 +6,9 @@ categories: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 ---
 
-Ever looked at a downloads folder full of mixed media files thinking "I should organize this... later"? Now later has arrived, and BatchMP Tools makes it a lot easier.
+Ever looked at a downloads folder full of mixed media files thinking "I should organize this... later"? Now later has arrived, and BatchMP Renamer makes it a lot easier.
 
-The latest updates to `renamer` add two new capabilities: **organize** for automatically grouping files into directories, and enhanced **print** functionality with virtual views over the original files structure.
+The latest updates add two new capabilities: **organize** for automatically grouping files into directories, and enhanced **print** functionality with virtual views over the original files structure.
 
 ## Organize by File Type
 
