@@ -86,7 +86,7 @@ But what if you just want to see files in a new organization without actually ch
 $ renamer print -b type
 ```
 
-This shows a virtual view of how the files would look organized by type, without intent to move anything:
+This shows a virtual view of how the files would look organized by type, without intent to actually move anything:
 
 ```bash
 Virtual view by type:
@@ -106,7 +106,7 @@ Same goes for date-based previews:
 $ renamer print -b date --date-format "%Y/%m"
 ```
 
-This is especially useful when experimenting with different organization strategies or date formats.
+This can be especially useful when experimenting with different organization strategies or date formats.
 
 
 ## Sized Virtual View
@@ -116,9 +116,6 @@ Sometimes it's useful to see not just how files would be organized, but also the
 ```bash
 $ renamer print -b date -df %y/%m -ss
 ```
-
-The `-ss` flag displays file sizes in a compact format, showing directory sizes alongside folder names and individual file sizes:
-
 ```bash
 Virtual view by date:
 ~/Downloads
