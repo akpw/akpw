@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Organize & Preview: New BatchMP Renamer Additions"
-date: 2025-01-22
+title: "Organize & Virtual Views: New BatchMP Renamer Additions"
+date: 2025-09-22
 categories: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 ---
@@ -31,6 +31,8 @@ The `-b type` option tells renamer to organize files based on their media type. 
   |- audio/
     |- favorite_song.mp3
     |- podcast_episode.m4a
+6 files, 3 folders
+Proceed? [y/n]
 ```
 
 Before actually moving anything, renamer shows you exactly what changes it plans to make and asks for confirmation. No surprises, no accidents.
