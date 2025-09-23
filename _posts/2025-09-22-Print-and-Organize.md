@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Organize & Virtual Views: New BatchMP Renamer Additions"
+title: "New BatchMP Renamer: Organize & Virtual Views"
 date: 2025-09-22
 categories: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
