@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "New BatchMP Renamer: Organize & Virtual Views"
+title: "BatchMP Renamer: Organize & Virtual Views"
 date: 2025-09-22
 categories: articles
 tags: [BatchMP Tools, Python, Batch Multimedia Processing]
 ---
 
-Ever looked at a downloads folder full of mixed media files thinking "I should organize this... later"? Now later has arrived, and BatchMP Renamer makes it a lot easier.
+Ever stared at a downloads folder full of mixed media files thinking "I should organize this... later"? Now later has arrived, and BatchMP Renamer makes it a lot easier.
 
-The latest updates add two new capabilities: **organize** for automatically grouping files into directories, and enhanced **print** functionality with virtual views over the original files structure.
+The latest updates add two new capabilities: **organize** for automatically grouping files into directories, and enhanced **print** functionality with virtual views over the original file structure.
 
 ## Organize by File Type
 
@@ -35,7 +35,7 @@ The `-b type` option tells renamer to organize files based on their media type. 
 Proceed? [y/n]
 ```
 
-Before actually moving anything, renamer shows you exactly what changes it plans to make and asks for confirmation. No surprises, no accidents.
+Before actually moving anything, renamer shows exactly what changes it plans to make and asks for confirmation. No surprises, no accidents.
 
 ## Organize by Date
 
@@ -80,13 +80,13 @@ Any common Python `strftime` format would do: `%Y-%m` for "2025-01", `%B_%Y` for
 
 ## The virtual views
 
-But what if you just want to see files in a new organization without actually changing anything? The enhanced `print` command now supports the same type of previews:
+But what if you need to see files in a new organization without actually changing anything? The enhanced `print` command now supports the same type of previews:
 
 ```bash
 $ renamer print -b type
 ```
 
-This shows a virtual view of how the files would look organized by type, without intent to actually move anything:
+This shows a virtual view of how the files would look organized by type, without intent to move anything:
 
 ```bash
 Virtual view by type:
@@ -114,7 +114,7 @@ This can be especially useful when experimenting with different organization str
 Sometimes it's useful to see not just how files would be organized, but also their sizes at a glance. The `print` command supports a size summary option with the `-ss` flag that adds file size information to the virtual view:
 
 ```bash
-$ renamer print -b date -df %y/%m -ss
+$ renamer print -b date -df "%y/%m" -ss
 ```
 ```bash
 Virtual view by date:
@@ -132,10 +132,69 @@ Virtual view by date:
 
 The size information works with any organization method (`-b type`, `-b date`) and date format combinations.
 
+## Sorted Virtual Views
+
+The virtual views become even more powerful when combined with sorting options. Using the `-s` parameter, it's easy to control how directories and files are ordered within the organized view:
+
+### Sort by Size
+
+When disk space becomes a concern, size-based sorting is invaluable:
+
+```bash
+$ renamer -s sd print -b type -ss
+```
+
+This shows directories sorted by size in descending order (largest first):
+
+```bash
+Virtual view by type:
+~/Downloads
+  |->/ 2.1GB video
+    |-  531MB movie_part1.mp4
+    |-  442MB movie_part2.mp4
+    |-  357MB presentation.mp4
+  |->/ 1.2GB nonmedia
+    |-  200MB installer.dmg
+    |-  150MB documentation.pdf
+    |-  32MB spreadsheet.xlsx
+  |->/ 8.0MB image
+    |-  4MB high_res_photo.jpg
+    |-  2MB screenshot.png
+    |-  1MB thumbnail.jpg
+```
+
+The size sorting helps identify which file types are taking up the most space, making it easier to decide what to organize first or what might need cleanup.
+
+For ascending order (smallest first), use `-s sa`:
+
+```bash
+$ renamer -s sa print -b type -ss
+```
+
+### Sort by Name
+
+Alphabetical sorting can be useful for systematic organization:
+
+```bash
+# Name ascending (A-Z)
+$ renamer -s na print -b type
+
+# Name descending (Z-A) 
+$ renamer -s nd print -b type
+```
+
+This works with both type-based and date-based approaches:
+
+```bash
+$ renamer -s sd print -b date --date-format "%Y-%m" -ss
+```
+
+Shows date-based directories sorted by total size, helping identify which months have the largest collections of files.
+
 
 ## Going the Other Direction: Flatten
 
-Sometimes things need to go in the opposite direction - taking a nested directory structure and flattening it into a single level. Maybe the files got organized too deeply, or need a simple, flat arrangement from a complex hierarchy. The `flatten` command does just that:
+Sometimes things need to go in the opposite direction - taking a nested directory structure and flattening it into a single level. Maybe the files got organized too deeply, or need a simple, flat arrangement from a complex hierarchy. The `flatten` command handles this:
 
 ```bash
 $ renamer flatten -tl 0
@@ -162,9 +221,9 @@ The `-tl 0` (target level 0) tells renamer to flatten everything to the root dir
   |- report.pdf
 ```
 
-This creates an interesting workflow: organize files with `organize`, review the structure, and if you prefer a flatter arrangement, just use `flatten -tl 0` to bring everything back to a single level.
+This creates an interesting workflow: organize files with `organize`, review the structure, and if a flatter arrangement is preferred, simply use `flatten -tl 0` to bring everything back to a single level.
 
-The flatten command handles duplicate filenames intelligently and, like all BatchMP Tools commands, shows you exactly what it plans to do before making any changes.
+The flatten command handles duplicate filenames intelligently and, like all BatchMP Tools commands, shows exactly what it plans to do before making any changes.
 
 ## Real-World Scenarios
 
@@ -175,16 +234,16 @@ Here's the described functionality in several common scenarios:
 $ renamer -r organize -b date --date-format "%Y/%m-%B"
 ```
 
-**Downloads Cleanup**: Sort mixed downloads by type to quickly find what you're looking for:
+**Downloads Cleanup**: Sort mixed downloads by type to quickly find what's needed:
 ```bash
 $ renamer organize -b type
 ```
 
 **Project Preparation**: Preview different organization strategies before committing:
 ```bash
-$ renamer print -b date --date-format "%Y-%m"
-$ renamer print -b type
-$ renamer organize -b type  # When you've decided
+$ renamer -s sd print -b date --date-format "%Y-%m" -ss
+$ renamer -s sd print -b type -ss
+$ renamer organize -b type  # When the choice is made
 ```
 
 **Archive Preparation**: Organize files by date with hierarchical structure for long-term storage:
@@ -192,10 +251,16 @@ $ renamer organize -b type  # When you've decided
 $ renamer organize -b date --date-format "%Y/%m/%d" --target-dir ~/Archives
 ```
 
+**Disk Space Analysis**: Identify which file types or time periods are consuming the most space:
+```bash
+$ renamer -s sd print -b type -ss    # Show largest file type categories first
+$ renamer -s sd print -b date --date-format "%Y-%m" -ss  # Show largest months first
+```
+
 **Reorganization Workflow**: Try different organization approaches by combining organize and flatten:
 ```bash
 $ renamer organize -b type          # Sort by type first
-$ renamer print -b date             # Preview date-based organization
+$ renamer -s sd print -b date -ss    # Preview date-based organization with size info
 $ renamer flatten -tl 0             # Flatten back to single level
 $ renamer organize -b date          # Now organize by date instead
 ```
